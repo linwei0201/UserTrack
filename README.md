@@ -9,7 +9,8 @@ npm run build
 
 - import css and js in your page
 
-  <link href="xxx/usertrack.[hash].css" rel="stylesheet" type="text/css">
+  <link href="xxx/usertrack.[hash].css" rel="stylesheet" type="text/css" />
+
   <script src=".../usertrack.[hash].min.js" ></script>
 
 - call after DOM loaded
