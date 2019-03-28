@@ -1,20 +1,29 @@
 # UserTrack
 a library to track user behaviors
 
-## Build dest files
-
-npm run build
-
 ## How to use
 
-- import css and js in your page
+- development mode
 
-  <link href="xxx/usertrack.[hash].css" rel="stylesheet" type="text/css" />
+  - start server `npm start`
+  - import js `<script src="http://localhost:9000/usertrack.js" ></script>`
+  - init after DOM loaded `UserTrack.init()`
 
-  <script src=".../usertrack.[hash].min.js" ></script>
+- production mode
 
-- call after DOM loaded
+  ```bash
+  # install package from npm
+  npm i usertrack --save
+  ```
 
-```
-UserTrack.init()
-```
+  ```js
+  // import js and css
+  import UserTrack from 'usertrack'
+  import 'usertrack/usertrack.[hash].css'
+  ```
+
+  ```js
+  // initialization after DOM loaded
+  /* global UserTrack: true */
+  UserTrack.init();
+  ```

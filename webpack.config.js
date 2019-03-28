@@ -26,7 +26,10 @@ const config = {
     compress: true,
     port: 9000,
     hot: true,
-    inline: true
+    inline: true,
+    after() {
+      console.log('\r\n ====> js ready at: http://localhost:9000/usertrack.js');
+    }
   },
   output: {
     path: __dirname + '/lib',
@@ -57,6 +60,12 @@ const config = {
           'less-loader'
         ]
         // use: [ 'style-loader', 'css-loader', 'less-loader' ]
+      },
+      {
+        test: /\.(jpe?g|png|gif|svg)$/i,
+        use: [
+          { loader: 'file-loader?name=/public/icons/[name].[ext]' }
+        ]
       }
     ]
   },
@@ -70,7 +79,10 @@ const config = {
   ],
   resolve: {
     modules: [path.resolve('./node_modules'), path.resolve('./src')],
-    extensions: ['.json', '.js']
+    extensions: ['.json', '.js'],
+    alias: {
+      '@': path.resolve(__dirname, 'src/')
+    }
   }
 };
 
