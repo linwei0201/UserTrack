@@ -4,7 +4,7 @@ export default {
   clip(proxy) {
     return new Promise((resolve, reject) => {
       html2canvas(document.querySelector('body'), {
-        proxy: proxy,
+        proxy,
         width: window.innerWidth,
         height: window.innerHeight,
         x: document.documentElement.scrollLeft || document.body.scrollLeft,

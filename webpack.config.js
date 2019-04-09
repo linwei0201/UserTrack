@@ -5,6 +5,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const env = process.env.NODE_ENV;
 const devMode = env === 'development';
+const proxy = require('html2canvas-proxy');
 
 let libraryName = process.env.npm_package_name;
 
@@ -28,6 +29,22 @@ const config = {
     port: 9000,
     hot: true,
     inline: true,
+    before(app, server) {
+      app.use('/', proxy());
+      app.all('*', (req, res, next) => {
+        res.header('Access-Control-Allow-Origin', '*');
+        res.header(
+          'Access-Control-Allow-Headers',
+          'Content-Type, Content-Length, Authorization, Accept, X-Requested-With , yourHeaderFeild'
+        );
+        res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');
+        if (req.method === 'OPTIONS') {
+          res.send(200);
+        } else {
+          next();
+        }
+      });
+    },
     after() {
       console.log('\r\n ====> js ready at: http://localhost:9000/usertrack.js');
     }
@@ -42,6 +59,15 @@ const config = {
   },
   module: {
     rules: [
+      {
+        test: /\.(html)$/,
+        use: {
+          loader: 'html-loader',
+          options: {
+            attrs: [':data-src']
+          }
+        }
+      },
       {
         test: /(\.jsx|\.js)$/,
         loader: 'babel-loader',
