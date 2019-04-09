@@ -2,6 +2,7 @@
 
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const env = process.env.NODE_ENV;
 const devMode = env === 'development';
 
@@ -52,12 +53,12 @@ const config = {
         exclude: /node_modules/
       },
       {
-        test: /\.less$/,
+        test: /\.scss$/,
         use: [
           devMode ? 'style-loader' : MiniCssExtractPlugin.loader,
           'css-loader',
           // 'postcss-loader',
-          'less-loader'
+          'sass-loader'
         ]
         // use: [ 'style-loader', 'css-loader', 'less-loader' ]
       },
@@ -75,6 +76,12 @@ const config = {
       // both options are optional
       filename: devMode ? `${libraryName}.css` : `${libraryName}.[hash:8].css`,
       chunkFilename: '[id].css'
+    }),
+    // https://github.com/ampedandwired/html-webpack-plugin
+    new HtmlWebpackPlugin({
+      filename: 'index.html',
+      template: 'index.html',
+      inject: true
     })
   ],
   resolve: {
