@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Page Title</title>
+    <title>Demo</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- <link rel="stylesheet" type="text/css" media="screen" href="usertrack.ddfcf486.css"> -->
     <script src="usertrack.js"></script>
@@ -54,8 +54,7 @@
             font-size: 24px;
         }
         #btn {
-            width: 50px;
-            height: 50px;
+            padding: 10px;
             position: fixed;
             right: 50px;
             bottom: 100px;
@@ -67,6 +66,7 @@
             color: #FFF;
             border: none;
             outline: none;
+            cursor: pointer;
         }
         @media screen and (max-width: 780px) {
             .wrap {
@@ -86,7 +86,7 @@
     </style>
 </head>
 <body>
-    <button id="btn">反馈</button>
+    <button id="btn">Feedback</button>
     <div class="wrap">
         <h3>霉霉申请并获得保护令 不给任何跟踪狂粉丝机会</h3>
         <p><img src="http://n.sinaimg.cn/ent/transform/320/w630h490/20180517/1-a0-harvfhu5623316.jpg"></p>
@@ -105,24 +105,20 @@
         trigger: document.getElementById('btn'),
         theme: '',
         proxy: 'http://127.0.0.1:9000',
-        title: '发送反馈',
-        placeholder: '请说明您的问题或分享您的想法',
-        requiredTip: '必须添加说明',
-        editTip: '点击编辑高亮或隐藏信息',
-        loadingTip: '正在加载屏幕截图...',
-        checkboxLabel: '包含截图',
-        cancelLabel: '取消',
-        confirmLabel: '发送',
-        hightlightTip: '突显问题',
-        hideTip: '隐藏敏感信息',
-        editDoneLabel: '完成',
-        license: `如出于法律原因需要请求更改内容，请前往
-                <a href="" >法律帮助</a>
-                页面。系统可能已将部分
-                <a href="">帐号和系统信息</a>
-                发送给Google。我们将根据自己的
-                <a href="">隐私权政策</a>和<a href="">服务条款</a>
-                使用您提供的信息帮助解决技术问题和改进我们的服务。`,
+        title: 'Send feedback',
+        placeholder: 'Describe your issue or share your ideas',
+        requiredTip: 'description is required',
+        editTip: 'Click to highlight or hide info',
+        loadingTip: 'loading screenshot...',
+        checkboxLabel: 'Include screenshot',
+        cancelLabel: 'cancel',
+        confirmLabel: 'send',
+        hightlightTip: 'Highlight issues',
+        hideTip: 'Hide sensitive info',
+        editDoneLabel: 'Done',
+        license: `Go to the<a href="" >Legal Help page</a>to request content changes for legal reasons.
+                Some<a href="">account and system information</a>may be sent to MS.
+                We will use the information that you give us to help address technical issues and to improve our services, subject to our <a href="">Privacy Policy</a>and<a href="">Terms of Service.</a>`,
         send: function (data) {
             console.log(data)
         }

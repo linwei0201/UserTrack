@@ -11,17 +11,17 @@ const DEFAULT_OPTION = {
   theme: '#3986FF',
   license: '',
   proxy: null,
-  title: '问题反馈',
-  placeholder: '请说明您的问题或分享您的想法',
-  requiredTip: '必须添加说明',
-  editTip: '点击编辑高亮或隐藏信息',
-  loadingTip: '正在加载屏幕截图...',
-  checkboxLabel: '包含截图',
-  cancelLabel: '取消',
-  confirmLabel: '发送',
-  hightlightTip: '突显问题',
-  hideTip: '隐藏敏感信息',
-  editDoneLabel: '完成',
+  title: 'Send feedback',
+  placeholder: 'Describe your issue or share your ideas',
+  requiredTip: 'description is required',
+  editTip: 'Click to highlight or hide info',
+  loadingTip: 'loading screenshot...',
+  checkboxLabel: 'Include screenshot',
+  cancelLabel: 'cancel',
+  confirmLabel: 'send',
+  hightlightTip: 'Highlight issues',
+  hideTip: 'Hide sensitive info',
+  editDoneLabel: 'Done',
   state: {
     isEditMode: false,
     toolBarType: 'highlight'
@@ -38,9 +38,7 @@ const UserTrack = {
   _renderFeedbackModal() {
     var finalTpl, jsRenderTpl;
 
-    // 获取模板
     jsRenderTpl = jsrender.templates(require('@/templates/feedback.html'));
-    // 模板与数据结合
     finalTpl = jsRenderTpl.render(this._options);
     $('body').append(finalTpl);
   },
@@ -92,11 +90,16 @@ const UserTrack = {
   _showFeedback() {
     this._clip();
     $('#feedback').show();
+    setTimeout(() => {
+      $('#feedbackDialog').show();
+    }, 0);
+    $('#feedbackDialog').find('.loading').show();
   },
   _clip() {
+    $('#screenshotPrev').attr('src', '');
     Clipper.clip(this._options.proxy).then(dataUrl => {
       $('#screenshotPrev').attr('src', dataUrl);
-      $('#feedbackDialog').show();
+      $('#feedbackDialog').find('.loading').hide();
     });
   }
 };

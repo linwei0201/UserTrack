@@ -24,6 +24,27 @@
                       <label>{{:checkboxLabel}}</label>
                   </div>
                   <div class="screenshot-area">
+                    <div class="loading">
+                        <div class="loading-icon">
+                            <svg
+                                viewBox="0 0 40 40"
+                                style="
+                                        width: 40px;
+                                        height: 40px;
+                                        position: relative;
+                                    ">
+                                <circle
+                                    cx="20" cy="20" r="18.25" fill="none"
+                                    strokeWidth="3.5"
+                                    strokeMiterlimit="20"
+                                    style="
+                                        stroke: rgb(57, 134, 255);
+                                        stroke-lnecap: round;
+                                    "></circle>
+                            </svg>
+                            </div>
+                            <!-- <span className="loading-text">{{:loadingTip}}</span> -->
+                        </div>
                       <div class="screenshot">
                           <div class="to-edit">
                               <div class="edit-icon">
@@ -43,14 +64,11 @@
                           <img id="screenshotPrev" src="">
                       </div>
                   </div>
-                  <div class="legal">如出于法律原因需要请求更改内容，请前往
-                      <a href="">法律帮助</a>
-                      页面。系统可能已将部分
-                      <a href="">帐号和系统信息</a>
-                      发送给Google。我们将根据自己的
-                      <a href="">隐私权政策</a>和<a href="">服务条款</a>
-                      使用您提供的信息帮助解决技术问题和改进我们的服务。
-                  </div>
+                  <!-- <div class="legal">
+                    Go to the<a href="" >Legal Help page</a>to request content changes for legal reasons.
+                    Some<a href="">account and system information</a>may be sent to MS.
+                    We will use the information that you give us to help address technical issues and to improve our services, subject to our <a href="">Privacy Policy</a>and<a href="">Terms of Service.</a>
+                  </div> -->
                   <div class="actions">
                       <div class="flatbutton cancel" style="color: rgb(117, 117, 117);">{{:cancelLabel}}</div>
                       <div class="flatbutton confirm" style="color: rgb(57, 134, 255);">{{:confirmLabel}}</div>
