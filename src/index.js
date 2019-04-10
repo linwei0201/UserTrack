@@ -52,7 +52,7 @@ const UserTrack = {
     });
 
     $('.to-edit').click(() => {
-      $.observable(this._options).setProperty('state.isEditMode', true);
+      // $.observable(this._options).setProperty('state.isEditMode', true);
     });
 
     // cancel event
@@ -96,11 +96,48 @@ const UserTrack = {
     $('#feedbackDialog').find('.loading').show();
   },
   _clip() {
-    $('#screenshotPrev').attr('src', '');
-    Clipper.clip(this._options.proxy).then(dataUrl => {
-      $('#screenshotPrev').attr('src', dataUrl);
-      $('#feedbackDialog').find('.loading').hide();
+    let videoPromise = new Promise((resolve, reject) => {
+      this._handleVideo(document.body, resolve, reject);
     });
+
+    $('#screenshotPrev').attr('src', '');
+    Promise.all([videoPromise]).then(() => {
+      Clipper.clip(this._options.proxy).then(dataUrl => {
+        $('#screenshotPrev').attr('src', dataUrl);
+        $('#feedbackDialog').find('.loading').hide();
+      });
+    });
+  },
+  _handleVideo(parent, resolve, reject) {
+    let videoItem = parent.getElementsByTagName('video');
+
+    if (videoItem === 0) {
+      resolve();
+      return;
+    }
+    for (let i = 0; i < videoItem.length; i++) {
+      let video = videoItem[0];
+
+      if (!video.style.backgroundImage) {
+        let w = $(video).width();
+        let h = $(video).height();
+
+        $(video).after('<canvas width="' + w + '" height="' + h + '"></canvas>');
+        let canvas = $(video).next('canvas').css({display: 'none'});
+
+        let ctx = canvas.get(0).getContext('2d');
+
+        ctx.drawImage(video, 0, 0, w, h);
+        try {
+          video.style.backgroundImage = 'url(' + canvas.get(0).toDataURL('image/png') + ')';
+        } catch (e) {
+          console.log(e);
+        } finally {
+          canvas.remove();
+        }
+      }
+    }
+    resolve();
   }
 };
 
