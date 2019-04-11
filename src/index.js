@@ -1,5 +1,6 @@
 import '@/assets/styles/index.scss';
 import '@/utils/domUtils';
+import { img2base64, getVideoBackground } from '@/utils/canvas';
 import Clipper from '@/utils/clipper';
 import $ from 'jquery';
 var jsrender = require('jsrender')($);
@@ -10,7 +11,6 @@ const DEFAULT_OPTION = {
   submitCallback: () => {},
   theme: '#3986FF',
   license: '',
-  proxy: null,
   title: 'Send feedback',
   placeholder: 'Describe your issue or share your ideas',
   requiredTip: 'description is required',
@@ -34,6 +34,7 @@ const UserTrack = {
     this._options = Object.assign({}, DEFAULT_OPTION, option);
     this._renderFeedbackModal();
     this._bindEvent();
+    this._parseTags();
   },
   _renderFeedbackModal() {
     var finalTpl, jsRenderTpl;
@@ -90,54 +91,47 @@ const UserTrack = {
   _showFeedback() {
     this._clip();
     $('#feedback').show();
-    setTimeout(() => {
-      $('#feedbackDialog').show();
-    }, 0);
     $('#feedbackDialog').find('.loading').show();
   },
   _clip() {
-    let videoPromise = new Promise((resolve, reject) => {
-      this._handleVideo(document.body, resolve, reject);
-    });
-
     $('#screenshotPrev').attr('src', '');
-    Promise.all([videoPromise]).then(() => {
-      Clipper.clip(this._options.proxy).then(dataUrl => {
-        $('#screenshotPrev').attr('src', dataUrl);
-        $('#feedbackDialog').find('.loading').hide();
+    Clipper.clip(this._options).then(dataUrl => {
+      $('#feedbackDialog').show();
+      $('#screenshotPrev').attr('src', dataUrl);
+      $('#feedbackDialog').find('.loading').hide();
+    });
+  },
+  _parseTags() {
+    this._parseImg(document.body);
+    this._parseVideo(document.body);
+  },
+  _parseImg(container) {
+    const imgs = Array.from(container.querySelectorAll('img')).filter(img => img.width && img.height);
+
+    if (!imgs.length) {
+      return false;
+    }
+    const promises = [];
+    imgs.forEach(img => {
+      const p = img2base64(img);
+      promises.push(p);
+    });
+    Promise.all(promises).then(results => {
+      results.forEach((base64, i) => {
+        imgs[i].src = base64;
       });
     });
   },
-  _handleVideo(parent, resolve, reject) {
-    let videoItem = parent.getElementsByTagName('video');
+  _parseVideo(container) {
+    let videos = container.querySelectorAll('video');
 
-    if (videoItem === 0) {
-      resolve();
-      return;
+    if (videos === 0) {
+      return false;
     }
-    for (let i = 0; i < videoItem.length; i++) {
-      let video = videoItem[0];
 
-      if (!video.style.backgroundImage) {
-        let w = $(video).width();
-        let h = $(video).height();
-
-        $(video).after('<canvas width="' + w + '" height="' + h + '"></canvas>');
-        let canvas = $(video).next('canvas').css({display: 'none'});
-
-        let ctx = canvas.get(0).getContext('2d');
-
-        ctx.drawImage(video, 0, 0, w, h);
-        try {
-          video.style.backgroundImage = 'url(' + canvas.get(0).toDataURL('image/png') + ')';
-        } catch (e) {
-          console.log(e);
-        } finally {
-          canvas.remove();
-        }
-      }
-    }
-    resolve();
+    videos.forEach(video => {
+      video.style.backgroundImage = `url(${getVideoBackground(video)})`;
+    });
   }
 };
 

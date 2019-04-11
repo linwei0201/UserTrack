@@ -104,29 +104,30 @@
     </div>
 </body>
 <script>
-    window.UserTrack.init({
-        container: document.getElementById('feedback'),
-        trigger: document.getElementById('btn'),
-        theme: '',
-        proxy: 'http://127.0.0.1:9000',
-        title: 'Send feedback',
-        placeholder: 'Describe your issue or share your ideas',
-        requiredTip: 'description is required',
-        editTip: 'Click to highlight or hide info',
-        loadingTip: 'loading screenshot...',
-        checkboxLabel: 'Include screenshot',
-        cancelLabel: 'cancel',
-        confirmLabel: 'send',
-        hightlightTip: 'Highlight issues',
-        hideTip: 'Hide sensitive info',
-        editDoneLabel: 'Done',
-        license: `Go to the<a href="" >Legal Help page</a>to request content changes for legal reasons.
-                Some<a href="">account and system information</a>may be sent to MS.
-                We will use the information that you give us to help address technical issues and to improve our services, subject to our <a href="">Privacy Policy</a>and<a href="">Terms of Service.</a>`,
-        submitCallback: function (data) {
-            console.log(data)
-        }
-    })
+    window.onload = function() {
+        window.UserTrack.init({
+            container: document.getElementById('feedback'),
+            trigger: document.getElementById('btn'),
+            theme: '',
+            title: 'Send feedback',
+            placeholder: 'Describe your issue or share your ideas',
+            requiredTip: 'description is required',
+            editTip: 'Click to highlight or hide info',
+            loadingTip: 'loading screenshot...',
+            checkboxLabel: 'Include screenshot',
+            cancelLabel: 'cancel',
+            confirmLabel: 'send',
+            hightlightTip: 'Highlight issues',
+            hideTip: 'Hide sensitive info',
+            editDoneLabel: 'Done',
+            license: `Go to the<a href="" >Legal Help page</a>to request content changes for legal reasons.
+                    Some<a href="">account and system information</a>may be sent to MS.
+                    We will use the information that you give us to help address technical issues and to improve our services, subject to our <a href="">Privacy Policy</a>and<a href="">Terms of Service.</a>`,
+            submitCallback: function (data) {
+                console.log(data)
+            }
+        })
+    }
 
 </script>
 </html>
