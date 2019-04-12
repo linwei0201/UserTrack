@@ -95,6 +95,9 @@ const UserTrack = {
           shot: $('#feedback #screenshotPrev').attr('src') || ''
         };
 
+        if ($('#feedback .checkbox .checkbox-icon.exclude-shot').hasClass('active')) {
+          delete data.shot;
+        }
         submitCallback(data);
         this._hideFeedback();
       }
