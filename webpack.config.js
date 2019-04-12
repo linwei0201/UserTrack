@@ -29,6 +29,9 @@ const config = {
     port: 9000,
     hot: true,
     inline: true,
+    allowedHosts: [
+      '.ms.com'
+    ],
     before(app, server) {
       app.set('views', __dirname + '/demo');
       app.engine('html', require('ejs').renderFile);
@@ -40,9 +43,24 @@ const config = {
       app.get('/demo', (req, res) => {
         res.render('index.html');
       });
+
+      app.all('*', (req, res, next) => {
+        res.header('Access-Control-Allow-Origin', '*');
+        res.header(
+          'Access-Control-Allow-Headers',
+          'Content-Type, Content-Length, Authorization, Accept, X-Requested-With , yourHeaderFeild'
+        );
+        res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');
+        if (req.method === 'OPTIONS') {
+          res.send(200);
+        } else {
+          next();
+        }
+      });
     },
     after() {
-      console.log('\r\n ====> js ready at: http://localhost:9000/usertrack.js');
+      console.log('\r\n ====> demo ready at: http://127.0.0.1:9000/demo');
+      console.log('\r\n ====> js ready at: http://127.0.0.1:9000/usertrack.js');
     }
   },
   output: {

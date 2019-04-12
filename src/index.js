@@ -1,6 +1,6 @@
 import '@/assets/styles/index.scss';
 import '@/utils/domUtils';
-import { img2base64, getVideoBackground } from '@/utils/canvas';
+import { img2base64, video2base64 } from '@/utils/canvas';
 import Clipper from '@/utils/clipper';
 import $ from 'jquery';
 var jsrender = require('jsrender')($);
@@ -54,6 +54,22 @@ const UserTrack = {
 
     $('.to-edit').click(() => {
       // $.observable(this._options).setProperty('state.isEditMode', true);
+    });
+
+    $('#feedback .checkbox .checkbox-icon').click((e) => {
+      const $target = $(e.currentTarget);
+      if ($target.hasClass('active')) {
+        $target.removeClass('active');
+        $target.siblings('svg').addClass('active');
+      } else {
+        $target.addClass('active');
+        $target.siblings('svg').removeClass('active');
+      }
+      // if ($('#feedback .checkbox .checkbox-icon.include-shot').hasClass('active')) {
+      //   $('#feedback .screenshot-area').show();
+      // } else {
+      //   $('#feedback .screenshot-area').hide();
+      // }
     });
 
     // cancel event
@@ -130,7 +146,7 @@ const UserTrack = {
     }
 
     videos.forEach(video => {
-      video.style.backgroundImage = `url(${getVideoBackground(video)})`;
+      video.style.backgroundImage = `url(${video2base64(video)})`;
     });
   }
 };

@@ -1,7 +1,7 @@
 export default {
   img2base64(img) {
     return new Promise((resolve, reject) => {
-      const { width, height } = img;
+      const { width, height } = img.getBoundingClientRect();
       const canvas = document.createElement('canvas');
 
       if (!width || !height) {
@@ -21,13 +21,12 @@ export default {
       };
     });
   },
-  getVideoBackground(video) {
+  video2base64(video) {
     if (!video.style.backgroundImage) {
       const { width, height } = video.getBoundingClientRect();
       let canvas = document.createElement('canvas');
       canvas.width = width;
       canvas.height = height;
-      document.body.appendChild(canvas);
       let ctx = canvas.getContext('2d');
 
       ctx.drawImage(video, 0, 0, width, height);
