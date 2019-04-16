@@ -3,6 +3,7 @@ import '@/utils/domUtils';
 import { img2base64, video2base64 } from '@/utils/canvas';
 import Clipper from '@/utils/clipper';
 import $ from 'jquery';
+var jsviews = require('jsviews')($);
 var jsrender = require('jsrender')($);
 
 const DEFAULT_OPTION = {
@@ -27,21 +28,23 @@ const DEFAULT_OPTION = {
     toolBarType: 'highlight'
   }
 };
+var app;
 
 const UserTrack = {
   _options: {},
   init(option) {
+    app = Object.assign({}, DEFAULT_OPTION, option);
     this._options = Object.assign({}, DEFAULT_OPTION, option);
     this._renderFeedbackModal();
     this._bindEvent();
     this._parseTags();
+    console.log(app);
   },
   _renderFeedbackModal() {
-    var finalTpl, jsRenderTpl;
+    var jsRenderTpl;
 
     jsRenderTpl = jsrender.templates(require('@/templates/feedback.html'));
-    finalTpl = jsRenderTpl.render(this._options);
-    $('body').append(finalTpl);
+    jsRenderTpl.link('#feedback', app);
   },
   _bindEvent() {
     // bind trigger event
@@ -53,7 +56,8 @@ const UserTrack = {
     });
 
     $('.to-edit').click(() => {
-      // $.observable(this._options).setProperty('state.isEditMode', true);
+      console.log(app);
+      jsviews.observable(app).setProperty('state.isEditMode', true);
     });
 
     $('#feedback .checkbox .checkbox-icon').click((e) => {
@@ -65,11 +69,12 @@ const UserTrack = {
         $target.addClass('active');
         $target.siblings('svg').removeClass('active');
       }
-      // if ($('#feedback .checkbox .checkbox-icon.include-shot').hasClass('active')) {
-      //   $('#feedback .screenshot-area').show();
-      // } else {
-      //   $('#feedback .screenshot-area').hide();
-      // }
+      if ($('#feedback .checkbox .checkbox-icon.include-shot').hasClass('active')) {
+        this._clip();
+        $('#feedbackDialog').find('.screenshot-area').show();
+      } else {
+        $('#feedbackDialog').find('.screenshot-area').hide();
+      }
     });
 
     // cancel event
@@ -102,6 +107,9 @@ const UserTrack = {
         this._hideFeedback();
       }
     });
+    $('#feedback .tool-bar clearfix .flatbutton done').click(() => {
+      this._hideFeedback();
+    });
   },
   _hideFeedback() {
     $('#feedback').hide();
@@ -115,6 +123,7 @@ const UserTrack = {
   _clip() {
     $('#screenshotPrev').attr('src', '');
     Clipper.clip(this._options).then(dataUrl => {
+      this.imgurl = dataUrl;
       $('#feedbackDialog').show();
       $('#screenshotPrev').attr('src', dataUrl);
       $('#feedbackDialog').find('.loading').hide();
@@ -151,6 +160,22 @@ const UserTrack = {
     videos.forEach(video => {
       video.style.backgroundImage = `url(${video2base64(video)})`;
     });
+  },
+  handleMouseMove(e) {
+    if (!this.move) return;
+    let toolBar = this.refs.toolBar;
+    let eX = this.eX;
+    let eY = this.eY;
+    let newEX = e.clientX + window.scrollX;
+    let newEY = e.clientY + window.scrollY;
+    let oX = newEX - eX;
+    let oY = newEY - eY;
+    let curL = parseFloat(toolBar.style.left);
+    let curT = parseFloat(toolBar.style.top);
+    toolBar.style.left = `${curL + oX}px`;
+    toolBar.style.top = `${curT + oY}px`;
+    this.eX = newEX;
+    this.eY = newEY;
   }
 };
 
