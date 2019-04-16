@@ -107,7 +107,6 @@
 <script>
     window.onload = function() {
         window.UserTrack.init({
-            container: document.getElementById('feedback'),
             trigger: document.getElementById('btn'),
             theme: '',
             title: 'Send feedback',
@@ -121,10 +120,6 @@
             hightlightTip: 'Highlight issues',
             hideTip: 'Hide sensitive info',
             editDoneLabel: 'Done',
-            state: {
-                isEditMode: false,
-                toolBarType: 'highlight'
-            },
             license: `Go to the<a href="" >Legal Help page</a>to request content changes for legal reasons.
                     Some<a href="">account and system information</a>may be sent to MS.
                     We will use the information that you give us to help address technical issues and to improve our services, subject to our <a href="">Privacy Policy</a>and<a href="">Terms of Service.</a>`,
