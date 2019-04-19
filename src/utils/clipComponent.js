@@ -30,6 +30,130 @@ const ClipComponent = {
   dragRect: false,
   startX: 0,
   startY: 0,
+  _documentMouseMove() {
+    this.documentMouseMoveFn = this.documentMouseMoveFn || this.documentMouseMove.bind(this);
+    return this.documentMouseMoveFn;
+  },
+  _elementHelperClick() {
+    this.elementHelperClickFn = this.elementHelperClickFn || this.elementHelperClick.bind(this);
+    return this.elementHelperClickFn;
+  },
+  _windowResize() {
+    this.windowResizeFn = this.windowResizeFn || this.windowResize.bind(this);
+    return this.windowResizeFn;
+  },
+  initListeners() {
+    document.addEventListener('mousemove', this._documentMouseMove(), false);
+    document.addEventListener('click', this._elementHelperClick(), false);
+    window.addEventListener('resize', this._windowResize(), false);
+  },
+  initCanvas(init) {
+    let canvas = $('#feedback #feedbackCanvas')[0];
+    if (!canvas) {
+      return false;
+    }
+    let shadowCanvas = $('#feedback #shadowCanvas')[0];
+    let docWidth = this.state.docWidth,
+      docHeight = this.state.docHeight;
+    if (!this.ctx) {
+      this.ctx = canvas.getContext('2d');
+    }
+    if (!this.sctx) {
+      this.sctx = shadowCanvas.getContext('2d');
+    }
+    if (init) {
+      canvas.style.width = docWidth;
+      canvas.style.height = docHeight;
+      shadowCanvas.style.width = docWidth;
+      shadowCanvas.style.height = docHeight;
+    }
+    canvas.width = docWidth;
+    canvas.height = docHeight;
+    shadowCanvas.width = docWidth;
+    shadowCanvas.height = docHeight;
+    this.sctx.fillStyle = 'rgba(0,0,0,0.38)';
+    this.sctx.fillRect(0, 0, docWidth, docHeight);
+  },
+  clearText() {
+    this.state.text = '';
+    $.observable(this).setProperty('state.text', '');
+  },
+  clearHightlights() {
+    this.state.highlightItem = [];
+    this.state.highlightItem.forEach((h, i) => {
+      $.observable(this.state.highlightItem).remove(i);
+    });
+  },
+  clearHightlight(k) {
+    $.observable(this.state.highlightItem).remove(k);
+    setTimeout(() => {
+      this.initCanvas();
+      this.drawHightlightBorder();
+      this.drawHightlightArea();
+    });
+  },
+  clearBlacks() {
+    this.state.blackItem = [];
+    this.state.blackItem.forEach((b, i) => {
+      $.observable(this.state.blackItem).remove(i);
+    });
+  },
+  clearBlack(k, e) {
+    $.observable(this.state.blackItem).remove(k);
+  },
+  removeEventListener() {
+    document.removeEventListener('mousemove', this._documentMouseMove(), false);
+    document.removeEventListener('click', this._elementHelperClick(), false);
+    window.removeEventListener('resize', this._windowResize(), false);
+  },
+  toEditMode() {
+    this.initListeners();
+    $.observable(this).setProperty('state.isEditMode', true);
+    $.observable(this).setProperty('screenShotSrc', '');
+    setTimeout(() => {
+      let toolBar = $('#feedback .tool-bar.clearfix')[0],
+        windowWidth = window.innerWidth,
+        windowHeight = window.innerHeight;
+      toolBar.style.left = `${windowWidth * 0.5}px`;
+      toolBar.style.top = `${windowHeight * 0.6}px`;
+    });
+  },
+  leaveEditMode() {
+    this.removeEventListener();
+    $.observable(this).setProperty('state.isEditMode', false);
+    setTimeout(() => {
+      this.shotScreen();
+    });
+  },
+  send() {
+    if (this.state.loading) {
+      this.snackbar(this.config.loadingTip);
+      return;
+    }
+    let text = this.state.text;
+    if (!text) {
+      $.observable(this).setProperty('state.textError', this.config.requiredTip);
+      $('#feedback textarea').focus();
+      return;
+    }
+    if (typeof this.config.submitCallback === 'function') {
+      let data = {
+        text: this.state.text
+      };
+      if (this.state.shotOpen) {
+        data.shot = this.screenShotSrc || '';
+      }
+      this.config.submitCallback(data);
+      this.cancel();
+    }
+    $.observable(this).setProperty('screenShotSrc', '');
+    this.clearHightlights();
+    this.clearBlacks();
+    this.clearText();
+  },
+  cancel() {
+    $.observable(this).setProperty('state.isOpen', false);
+  },
   handleMoveMouseDown(e) {
     this.move = true;
     this.eX = e.clientX + window.scrollX;
@@ -74,7 +198,6 @@ const ClipComponent = {
       });
     }
   },
-
   handleMouseMove(e) {
     if (!this.move) return;
     let toolBar = $('#feedback .tool-bar.clearfix')[0];
@@ -105,18 +228,12 @@ const ClipComponent = {
       this.ctx.stroke();
     });
   },
-
   drawHightlightArea() {
     let highlightItem = this.state.highlightItem;
     highlightItem.map((data, k) => {
       this.sctx.clearRect(data.sx, data.sy, data.width, data.height);
       this.ctx.clearRect(data.sx, data.sy, data.width, data.height);
     });
-  },
-  initListeners() {
-    document.addEventListener('mousemove', this._documentMouseMove(), false);
-    document.addEventListener('click', this._elementHelperClick(), false);
-    window.addEventListener('resize', this._windowResize(), false);
   },
   windowResize() {
     this.calcHeight();
@@ -134,39 +251,6 @@ const ClipComponent = {
     setTimeout(() => {
       this.initCanvas(true);
     });
-  },
-
-  removeEventListener() {
-    document.removeEventListener('mousemove', this._documentMouseMove(), false);
-    document.removeEventListener('click', this._elementHelperClick(), false);
-    window.removeEventListener('resize', this._windowResize(), false);
-  },
-  initCanvas(init) {
-    let canvas = $('#feedback #feedbackCanvas')[0];
-    if (!canvas) {
-      return false;
-    }
-    let shadowCanvas = $('#feedback #shadowCanvas')[0];
-    let docWidth = this.state.docWidth,
-      docHeight = this.state.docHeight;
-    if (!this.ctx) {
-      this.ctx = canvas.getContext('2d');
-    }
-    if (!this.sctx) {
-      this.sctx = shadowCanvas.getContext('2d');
-    }
-    if (init) {
-      canvas.style.width = docWidth;
-      canvas.style.height = docHeight;
-      shadowCanvas.style.width = docWidth;
-      shadowCanvas.style.height = docHeight;
-    }
-    canvas.width = docWidth;
-    canvas.height = docHeight;
-    shadowCanvas.width = docWidth;
-    shadowCanvas.height = docHeight;
-    this.sctx.fillStyle = 'rgba(0,0,0,0.38)';
-    this.sctx.fillRect(0, 0, docWidth, docHeight);
   },
   drawElementHelper(info) {
     this.initCanvas();
@@ -186,18 +270,6 @@ const ClipComponent = {
       this.ctx.fillStyle = 'rgba(0,0,0,.4)';
       this.ctx.fillRect(info.sx, info.sy, info.width, info.height);
     }
-  },
-  _documentMouseMove() {
-    this.documentMouseMoveFn = this.documentMouseMoveFn || this.documentMouseMove.bind(this);
-    return this.documentMouseMoveFn;
-  },
-  _elementHelperClick() {
-    this.elementHelperClickFn = this.elementHelperClickFn || this.elementHelperClick.bind(this);
-    return this.elementHelperClickFn;
-  },
-  _windowResize() {
-    this.windowResizeFn = this.windowResizeFn || this.windowResize.bind(this);
-    return this.windowResizeFn;
   },
   documentMouseMove(e) {
     if (this.canvasMD) {
@@ -245,7 +317,6 @@ const ClipComponent = {
     }
   },
   inElement(e) {
-    // console.log('HIGH_LIGHT_ELEMENTS', HIGH_LIGHT_ELEMENTS);
     let x = e.clientX,
       y = e.clientY;
     let el = document.elementsFromPoint(x, y)[3];
@@ -263,7 +334,6 @@ const ClipComponent = {
     }
     return false;
   },
-
   elementHelperClick(e) {
     if (this.dragRect) return;
     let nodeName = e.target.nodeName;
@@ -277,52 +347,6 @@ const ClipComponent = {
         $.observable(this.state.blackItem).insert(rectInfo);
       }
     }
-  },
-  toEditMode() {
-    this.initListeners();
-    $.observable(this).setProperty('state.isEditMode', true);
-    $.observable(this).setProperty('screenShotSrc', '');
-    setTimeout(() => {
-      let toolBar = $('#feedback .tool-bar.clearfix')[0],
-        windowWidth = window.innerWidth,
-        windowHeight = window.innerHeight;
-      toolBar.style.left = `${windowWidth * 0.5}px`;
-      toolBar.style.top = `${windowHeight * 0.6}px`;
-    });
-  },
-  clearText() {
-    this.state.text = '';
-    $.observable(this).setProperty('state.text', '');
-  },
-  clearHightlights() {
-    this.state.highlightItem = [];
-    this.state.highlightItem.forEach((h, i) => {
-      $.observable(this.state.highlightItem).remove(i);
-    });
-  },
-  clearHightlight(k) {
-    $.observable(this.state.highlightItem).remove(k);
-    setTimeout(() => {
-      this.initCanvas();
-      this.drawHightlightBorder();
-      this.drawHightlightArea();
-    });
-  },
-  clearBlacks() {
-    this.state.blackItem = [];
-    this.state.blackItem.forEach((b, i) => {
-      $.observable(this.state.blackItem).remove(i);
-    });
-  },
-  clearBlack(k, e) {
-    $.observable(this.state.blackItem).remove(k);
-  },
-  editCancel() {
-    this.removeEventListener();
-    $.observable(this).setProperty('state.isEditMode', false);
-    setTimeout(() => {
-      this.shotScreen();
-    });
   },
   shotScreen() {
     if (this.state.loading) return;
@@ -355,38 +379,8 @@ const ClipComponent = {
   loadingState(state) {
     $.observable(this).setProperty('state.loading', state);
   },
-  send() {
-    if (this.state.loading) {
-      this.snackbar(this.config.loadingTip);
-      return;
-    }
-    let text = this.state.text;
-    if (!text) {
-      $.observable(this).setProperty('state.textError', this.config.requiredTip);
-      $('#feedback textarea').focus();
-      return;
-    }
-    if (typeof this.config.submitCallback === 'function') {
-      let data = {
-        text: this.state.text
-      };
-      if (this.state.shotOpen) {
-        data.shot = this.screenShotSrc || '';
-      }
-      this.config.submitCallback(data);
-      this.cancel();
-    }
-    $.observable(this).setProperty('screenShotSrc', '');
-    this.clearHightlights();
-    this.clearBlacks();
-    this.clearText();
-  },
   setTextError() {
     $.observable(this).setProperty('state.textError', '');
-  },
-  cancel() {
-    // this.removeEventListener();
-    $.observable(this).setProperty('state.isOpen', false);
   },
   snackbar(msg) {
     if (this.timer) {
