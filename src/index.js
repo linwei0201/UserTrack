@@ -2,21 +2,17 @@ import '@/assets/styles/index.scss';
 import '@/utils/domUtils';
 import { img2base64, video2base64 } from '@/utils/canvas';
 import $ from 'jquery';
-import DEFAULT_OPTION from '@/utils/defaultOption';
+import { DEFAULT_OPTION } from '@/constants';
+import ClipComponent from '@/utils/clipComponent';
 var jsviews = require('jsviews')($);
 
 const UserTrack = {
-  _options: {},
+  _component: {},
   init(option) {
-    this._options = Object.assign({}, DEFAULT_OPTION, option);
+    ClipComponent.config = Object.assign({}, DEFAULT_OPTION, option);
+    this._component = ClipComponent;
     this._parseTags();
     this._renderFeedbackModal();
-  },
-  _renderFeedbackModal() {
-    var RenderTemplate = jsviews.templates(require('@/templates/feedback.html'));
-    $('body').append('<div id="feedback"></div>');
-    RenderTemplate.link('#feedback', this._options);
-    this._renderfinish();
   },
   _parseTags() {
     this._parseImg(document.body);
@@ -50,8 +46,11 @@ const UserTrack = {
       video.style.backgroundImage = `url(${video2base64(video)})`;
     });
   },
-  _renderfinish() {
-    this._options.componentDidMount();
+  _renderFeedbackModal() {
+    var RenderTemplate = jsviews.templates(require('@/templates/feedback.html'));
+    $('body').append('<div id="feedback"></div>');
+    RenderTemplate.link('#feedback', this._component);
+    this._component.componentDidMount();
   }
 };
 

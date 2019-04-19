@@ -1,28 +1,9 @@
 
 import Clipper from '@/utils/clipper';
 import $ from 'jquery';
-const hightLightEl = ['button', 'a', 'span', 'em', 'i', 'h1', 'h2', 'h3', 'h4',
-  'h5', 'h6', 'p', 'strong', 'small', 'sub',
-  'sup', 'b', 'time', 'img', 'video', 'input', 'label', 'select', 'textarea',
-  'article', 'summary', 'section'];
-const DEFAULT_OPTION = {
-  container: $('#feedback'),
-  trigger: $('#btn'),
-  submitCallback: () => {},
-  theme: '#3986FF',
-  license: '',
-  title: 'Send feedback',
-  placeholder: 'Describe your issue or share your ideas',
-  requiredTip: 'description is required',
-  editTip: 'Click to highlight or hide info',
-  loadingTip: 'loading screenshot...',
-  checkboxLabel: 'Include screenshot',
-  cancelLabel: 'cancel',
-  confirmLabel: 'send',
-  highlightTip: 'Highlight issues',
-  hideTip: 'Hide sensitive info',
-  editDoneLabel: 'Done',
-  screenShotSrc: '',
+import { HIGH_LIGHT_ELEMENTS } from '@/constants';
+const ClipComponent = {
+  config: { },
   state: {
     docWidth: 0,
     docHeight: 0,
@@ -41,6 +22,7 @@ const DEFAULT_OPTION = {
     snackbar: false,
     snackbarMsg: ''
   },
+  screenShotSrc: '',
   move: false,
   eX: 0,
   eY: 0,
@@ -131,7 +113,7 @@ const DEFAULT_OPTION = {
       this.ctx.clearRect(data.sx, data.sy, data.width, data.height);
     });
   },
-  addEventListener() {
+  initListeners() {
     document.addEventListener('mousemove', this._documentMouseMove(), false);
     document.addEventListener('click', this._elementHelperClick(), false);
     window.addEventListener('resize', this._windowResize(), false);
@@ -161,6 +143,9 @@ const DEFAULT_OPTION = {
   },
   initCanvas(init) {
     let canvas = $('#feedback #feedbackCanvas')[0];
+    if (!canvas) {
+      return false;
+    }
     let shadowCanvas = $('#feedback #shadowCanvas')[0];
     let docWidth = this.state.docWidth,
       docHeight = this.state.docHeight;
@@ -260,12 +245,13 @@ const DEFAULT_OPTION = {
     }
   },
   inElement(e) {
+    // console.log('HIGH_LIGHT_ELEMENTS', HIGH_LIGHT_ELEMENTS);
     let x = e.clientX,
       y = e.clientY;
     let el = document.elementsFromPoint(x, y)[3];
     let canvas = $('#feedback #feedbackCanvas')[0];
     canvas.style.cursor = 'crosshair';
-    if (el && hightLightEl.indexOf(el.nodeName.toLocaleLowerCase()) > -1) {
+    if (el && HIGH_LIGHT_ELEMENTS.indexOf(el.nodeName.toLocaleLowerCase()) > -1) {
       let rect = el.getBoundingClientRect();
       let rectInfo = {
         sx: rect.left + (document.documentElement.scrollLeft + document.body.scrollLeft),
@@ -293,6 +279,7 @@ const DEFAULT_OPTION = {
     }
   },
   toEditMode() {
+    this.initListeners();
     $.observable(this).setProperty('state.isEditMode', true);
     $.observable(this).setProperty('screenShotSrc', '');
     setTimeout(() => {
@@ -303,6 +290,16 @@ const DEFAULT_OPTION = {
       toolBar.style.top = `${windowHeight * 0.6}px`;
     });
   },
+  clearText() {
+    this.state.text = '';
+    $.observable(this).setProperty('state.text', '');
+  },
+  clearHightlights() {
+    this.state.highlightItem = [];
+    this.state.highlightItem.forEach((h, i) => {
+      $.observable(this.state.highlightItem).remove(i);
+    });
+  },
   clearHightlight(k) {
     $.observable(this.state.highlightItem).remove(k);
     setTimeout(() => {
@@ -311,11 +308,17 @@ const DEFAULT_OPTION = {
       this.drawHightlightArea();
     });
   },
-
+  clearBlacks() {
+    this.state.blackItem = [];
+    this.state.blackItem.forEach((b, i) => {
+      $.observable(this.state.blackItem).remove(i);
+    });
+  },
   clearBlack(k, e) {
     $.observable(this.state.blackItem).remove(k);
   },
   editCancel() {
+    this.removeEventListener();
     $.observable(this).setProperty('state.isEditMode', false);
     setTimeout(() => {
       this.shotScreen();
@@ -354,31 +357,35 @@ const DEFAULT_OPTION = {
   },
   send() {
     if (this.state.loading) {
-      this.snackbar(this.loadingTip);
+      this.snackbar(this.config.loadingTip);
       return;
     }
     let text = this.state.text;
     if (!text) {
-      $.observable(this).setProperty('state.textError', this.requiredTip);
+      $.observable(this).setProperty('state.textError', this.config.requiredTip);
       $('#feedback textarea').focus();
       return;
     }
-    if (typeof this.submitCallback === 'function') {
+    if (typeof this.config.submitCallback === 'function') {
       let data = {
         text: this.state.text
       };
       if (this.state.shotOpen) {
         data.shot = this.screenShotSrc || '';
       }
-      this.submitCallback(data);
+      this.config.submitCallback(data);
       this.cancel();
     }
+    $.observable(this).setProperty('screenShotSrc', '');
+    this.clearHightlights();
+    this.clearBlacks();
+    this.clearText();
   },
   setTextError() {
     $.observable(this).setProperty('state.textError', '');
   },
   cancel() {
-    this.removeEventListener();
+    // this.removeEventListener();
     $.observable(this).setProperty('state.isOpen', false);
   },
   snackbar(msg) {
@@ -399,11 +406,12 @@ const DEFAULT_OPTION = {
     }
   },
   componentDidMount() {
-    if (this.trigger) {
-      this.trigger.addEventListener('click', () => {
+    const triggerElement = this.config.trigger;
+    if (triggerElement) {
+      triggerElement.addEventListener('click', (e) => {
+        e.stopPropagation();
         $.observable(this).setProperty('state.isOpen', true);
         this.calcHeight();
-        this.addEventListener();
         if (this.state.shotOpen) {
           this.shotScreen();
         }
@@ -411,4 +419,4 @@ const DEFAULT_OPTION = {
     }
   }
 };
-export default DEFAULT_OPTION;
+export default ClipComponent;
