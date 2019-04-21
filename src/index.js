@@ -1,9 +1,9 @@
 import '@/assets/styles/index.scss';
 import '@/utils/domUtils';
 import { img2base64, video2base64 } from '@/utils/canvas';
-import $ from 'jquery';
 import { DEFAULT_OPTION } from '@/constants';
 import ClipComponent from '@/utils/clipComponent';
+import $ from 'jquery';
 var jsviews = require('jsviews')($);
 
 const UserTrack = {
@@ -48,11 +48,10 @@ const UserTrack = {
   },
   _renderFeedbackModal() {
     var RenderTemplate = jsviews.templates(require('@/templates/feedback.html'));
-    $('body').append('<div id="feedback"></div>');
+    document.body.append('<div id="feedback"></div>');
     RenderTemplate.link('#feedback', this._component);
     this._component.componentDidMount();
   }
 };
-
 window.UserTrack = UserTrack;
 export default UserTrack;

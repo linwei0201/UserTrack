@@ -1,4 +1,3 @@
-
 import Clipper from '@/utils/clipper';
 import $ from 'jquery';
 import { HIGH_LIGHT_ELEMENTS } from '@/constants';
@@ -48,11 +47,11 @@ const ClipComponent = {
     window.addEventListener('resize', this._windowResize(), false);
   },
   initCanvas(init) {
-    let canvas = $('#feedback #feedbackCanvas')[0];
+    let canvas = document.querySelector('#feedback #feedbackCanvas');
     if (!canvas) {
       return false;
     }
-    let shadowCanvas = $('#feedback #shadowCanvas')[0];
+    let shadowCanvas = document.querySelector('#feedback #shadowCanvas');
     let docWidth = this.state.docWidth,
       docHeight = this.state.docHeight;
     if (!this.ctx) {
@@ -73,6 +72,10 @@ const ClipComponent = {
     shadowCanvas.height = docHeight;
     this.sctx.fillStyle = 'rgba(0,0,0,0.38)';
     this.sctx.fillRect(0, 0, docWidth, docHeight);
+  },
+  clearCanvasCtx() {
+    this.ctx = null;
+    this.sctx = null;
   },
   clearText() {
     this.state.text = '';
@@ -111,7 +114,7 @@ const ClipComponent = {
     $.observable(this).setProperty('state.isEditMode', true);
     $.observable(this).setProperty('screenShotSrc', '');
     setTimeout(() => {
-      let toolBar = $('#feedback .tool-bar.clearfix')[0],
+      let toolBar = document.querySelector('#feedback .tool-bar.clearfix'),
         windowWidth = window.innerWidth,
         windowHeight = window.innerHeight;
       toolBar.style.left = `${windowWidth * 0.5}px`;
@@ -150,8 +153,10 @@ const ClipComponent = {
     this.clearHightlights();
     this.clearBlacks();
     this.clearText();
+    this.clearCanvasCtx();
   },
   cancel() {
+    this.clearCanvasCtx();
     $.observable(this).setProperty('state.isOpen', false);
   },
   handleMoveMouseDown(e) {
@@ -200,7 +205,7 @@ const ClipComponent = {
   },
   handleMouseMove(e) {
     if (!this.move) return;
-    let toolBar = $('#feedback .tool-bar.clearfix')[0];
+    let toolBar = document.querySelector('#feedback .tool-bar.clearfix');
     let eX = this.eX;
     let eY = this.eY;
     let newEX = e.clientX + window.scrollX;
@@ -302,7 +307,7 @@ const ClipComponent = {
   },
   elementHelper(e) {
     let rectInfo = this.inElement(e);
-    let canvas = $('#feedback #feedbackCanvas')[0];
+    let canvas = document.querySelector('#feedback #feedbackCanvas');
     if (rectInfo) {
       canvas.style.cursor = 'pointer';
       this.drawElementHelper(rectInfo);
@@ -320,7 +325,7 @@ const ClipComponent = {
     let x = e.clientX,
       y = e.clientY;
     let el = document.elementsFromPoint(x, y)[3];
-    let canvas = $('#feedback #feedbackCanvas')[0];
+    let canvas = document.querySelector('#feedback #feedbackCanvas');
     canvas.style.cursor = 'crosshair';
     if (el && HIGH_LIGHT_ELEMENTS.indexOf(el.nodeName.toLocaleLowerCase()) > -1) {
       let rect = el.getBoundingClientRect();
@@ -355,7 +360,7 @@ const ClipComponent = {
     this.switchCanvasVisible(highlightItem.length > 0);
     Clipper.clip(this._options).then(dataUrl => {
       $.observable(this).setProperty('screenShotSrc', dataUrl);
-      $('#feedback #screenshotPrev')[0].onload = () => {
+      document.querySelector('#feedback #screenshotPrev').onload = () => {
         $.observable(this).setProperty('state.screenshotEdit', true);
       };
       this.loadingState(false);
@@ -366,7 +371,7 @@ const ClipComponent = {
     });
   },
   switchCanvasVisible(visible) {
-    let shadowCanvas = $('#feedback #shadowCanvas')[0];
+    let shadowCanvas = document.querySelector('#feedback #shadowCanvas');
     if (visible) {
       shadowCanvas.removeAttribute('data-html2canvas-ignore');
     } else {
@@ -406,7 +411,7 @@ const ClipComponent = {
         e.stopPropagation();
         $.observable(this).setProperty('state.isOpen', true);
         this.calcHeight();
-        if (this.state.shotOpen) {
+        if (this.state.shotOpen && !this.screenShotSrc) {
           this.shotScreen();
         }
       });
