@@ -1,6 +1,6 @@
 {
   "name": "usertrack",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "a library to track user behaviors",
   "main": "index.js",
   "scripts": {

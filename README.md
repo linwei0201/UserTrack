@@ -24,10 +24,17 @@ a library to track user behaviors
   Or
   ```js
   //Directly refer to the js file
-  <link rel="stylesheet" href="lib/usertrack.[hash].css">
-  <script src="lib/usertrack.[hash].min.js"></script>
-  
+  <link rel="stylesheet" href="https://usertracklib.azurewebsites.net/${version}/usertrack.${version}.css">
+  <script src="https://usertracklib.azurewebsites.net/${version}/usertrack.${version}.min.js"></script>
   ```
+
+## versions
+
+version | release time | change log
+---- | --- | ---
+v0.0.1 | 22/04/2019 | [Change Log v0.0.1](https://github.com/linwei0201/UserTrack/blob/master/ChangeLog.md)
+
+
   If jQuery is already referenced in your project, please put the usertrack.[hash].min.js in front of jQuery.
   ```js
   //Add feedback div and button
