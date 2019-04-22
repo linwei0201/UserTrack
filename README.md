@@ -45,22 +45,18 @@ v0.0.1 | 22/04/2019 | [Change Log v0.0.1](https://github.com/linwei0201/UserTrac
   //Add style of the button
   <style>
         #btn {
-            padding: 10px;
-            width: 80px;
-            height: 80px;
             position: fixed;
             right: 50px;
             bottom: 100px;
-            background: #3986FF;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: #FFF;
+            width: 80px;
+            height: 80px;
+            padding: 10px;
             border: none;
             outline: none;
+            border-radius: 50%;
+            background: #3986FF;
+            color: #FFF;
             cursor: pointer;
-            height: calcu();
         }
   </style>
   // initialization after DOM loaded
@@ -68,22 +64,20 @@ v0.0.1 | 22/04/2019 | [Change Log v0.0.1](https://github.com/linwei0201/UserTrac
   <script>
     window.onload = function () {
         window.UserTrack.init({
-            container: document.getElementById('feedback'),
-            trigger: document.getElementById('btn'),
-            theme: '',
-            title: 'Send feedback',
-            placeholder: 'Describe your issue or share your ideas',
-            requiredTip: 'description is required',
-            editTip: 'Click to highlight or hide info',
-            loadingTip: 'loading screenshot...',
-            checkboxLabel: 'Include screenshot',
-            cancelLabel: 'cancel',
-            confirmLabel: 'send',
-            hightlightTip: 'Highlight issues',
-            hideTip: 'Hide sensitive info',
-            editDoneLabel: 'Done',
+            trigger: document.querySelector('#btn'), // button to trigger feedback dialog
+            title: 'Send feedback', // title for feedback dialog
+            placeholder: 'Describe your issue or share your ideas', // placeholder for feedback text
+            requiredTip: 'description is required', // tip for feedback text
+            editTip: 'Click to highlight or hide info', // mouseover tip on edit screenshot
+            loadingTip: 'loading screenshot...', // tip for loading screenshot
+            checkboxLabel: 'Include screenshot', // label for include/exclude screenshot checkbox
+            cancelLabel: 'cancel', // cancel button text
+            confirmLabel: 'send', // submit button text
+            hightlightTip: 'Highlight issues', // mouseover tip for highlight
+            hideTip: 'Hide sensitive info', // mouseover tip for hide private content
+            editDoneLabel: 'Done', // button text for submit highlight & blacks edit
             submitCallback: function (data) {
-                //Add the submit feedback code here
+                // Add the submit feedback code here
                 console.log(data)
             }
         })
