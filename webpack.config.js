@@ -3,6 +3,7 @@
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const env = process.env.NODE_ENV;
 const devMode = env === 'development';
 const express = require('express');
@@ -123,7 +124,8 @@ const config = {
       filename: 'index.html',
       template: __dirname + '/demo/index.html',
       inject: true
-    })
+    }),
+    new BundleAnalyzerPlugin()
   ],
   resolve: {
     modules: [path.resolve('./node_modules'), path.resolve('./src')],
