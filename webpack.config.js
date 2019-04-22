@@ -95,12 +95,12 @@ const config = {
         exclude: /node_modules/
       },
       {
-        test: /\.scss$/,
+        test: /\.less$/,
         use: [
           devMode ? 'style-loader' : MiniCssExtractPlugin.loader,
           'css-loader',
           // 'postcss-loader',
-          'sass-loader'
+          'less-loader'
         ]
         // use: [ 'style-loader', 'css-loader', 'less-loader' ]
       },

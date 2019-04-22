@@ -1,4 +1,4 @@
-import '@/assets/styles/index.scss';
+import '@/assets/styles/index.less';
 import '@/utils/domUtils';
 import { img2base64, video2base64 } from '@/utils/canvas';
 import { DEFAULT_OPTION } from '@/constants';

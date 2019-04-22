@@ -304,6 +304,7 @@ const ClipComponent = {
         this.ctx.fillRect(clientX, clientY, width, height);
       }
     } else {
+      this.dragRect = false;
       this.elementHelper(e);
     }
   },
