@@ -79,7 +79,9 @@ const ClipComponent = {
   },
   clearText() {
     this.state.text = '';
+    this.state.textError = '';
     $.observable(this).setProperty('state.text', '');
+    $.observable(this).setProperty('state.textError', '');
   },
   clearHightlights() {
     this.state.highlightItem = [];
