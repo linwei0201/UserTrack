@@ -8,6 +8,7 @@ const devMode = env === 'development';
 const express = require('express');
 
 let libraryName = process.env.npm_package_name;
+const version = process.env.npm_package_version;
 
 let outputFile, mode;
 
@@ -16,7 +17,7 @@ if (devMode) {
   outputFile = libraryName + '.js';
 } else {
   mode = 'production';
-  outputFile = libraryName + '.[hash:8].min.js';
+  outputFile = `${libraryName}.v${version}.min.js`;
 }
 
 const config = {
@@ -114,7 +115,7 @@ const config = {
     new MiniCssExtractPlugin({
       // Options similar to the same options in webpackOptions.output
       // both options are optional
-      filename: devMode ? `${libraryName}.css` : `${libraryName}.[hash:8].css`,
+      filename: devMode ? `${libraryName}.css` : `${libraryName}.v${version}.css`,
       chunkFilename: '[id].css'
     }),
     // https://github.com/ampedandwired/html-webpack-plugin
