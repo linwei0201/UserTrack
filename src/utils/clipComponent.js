@@ -161,7 +161,7 @@ const ClipComponent = {
     this.clearCanvasCtx();
     $.observable(this).setProperty('state.isOpen', false);
   },
-  handleMoveMouseDown(e) {
+  handleToolbarMouseDown(e) {
     this.move = true;
     this.eX = e.clientX + window.scrollX;
     this.eY = e.clientY + window.scrollY;
@@ -413,6 +413,12 @@ const ClipComponent = {
         e.stopPropagation();
         $.observable(this).setProperty('state.isOpen', true);
         this.calcHeight();
+        if (this.state.highlightItem.length) {
+          setTimeout(() => {
+            this.drawHightlightBorder();
+            this.drawHightlightArea();
+          });
+        }
         if (this.state.shotOpen && !this.screenShotSrc) {
           this.shotScreen();
         }
