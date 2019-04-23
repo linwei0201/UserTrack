@@ -26,24 +26,37 @@ const ClipComponent = {
   eX: 0,
   eY: 0,
   ctx: null,
+  canvasMove: false,
   dragRect: false,
   startX: 0,
   startY: 0,
-  _documentMouseMove() {
-    this.documentMouseMoveFn = this.documentMouseMoveFn || this.documentMouseMove.bind(this);
-    return this.documentMouseMoveFn;
-  },
-  _elementHelperClick() {
-    this.elementHelperClickFn = this.elementHelperClickFn || this.elementHelperClick.bind(this);
-    return this.elementHelperClickFn;
-  },
   _windowResize() {
     this.windowResizeFn = this.windowResizeFn || this.windowResize.bind(this);
     return this.windowResizeFn;
   },
+  _hasTargetClass(target, classList = []) {
+    let hasClass = false;
+    classList.forEach(cls => {
+      if (target.classList && target.classList.contains(cls)) {
+        hasClass = true;
+      }
+    });
+    return hasClass;
+  },
+  _isClickOnCanvas(target) {
+    const excludeClasses = ['rect', 'highlt-btn', 'blacklt-btn', 'close-edit-btn'];
+    let parent = null;
+    let isOnCanvas = false;
+    while (target && !this._hasTargetClass(target, excludeClasses) && target.parentNode) {
+      target = target.parentNode;
+    }
+    parent = target;
+    if (parent && this._hasTargetClass(parent, excludeClasses)) {
+      isOnCanvas = true;
+    }
+    return isOnCanvas;
+  },
   initListeners() {
-    document.addEventListener('mousemove', this._documentMouseMove(), false);
-    document.addEventListener('click', this._elementHelperClick(), false);
     window.addEventListener('resize', this._windowResize(), false);
   },
   initCanvas(init) {
@@ -89,7 +102,7 @@ const ClipComponent = {
       $.observable(this.state.highlightItem).remove(i);
     });
   },
-  clearHightlight(k) {
+  clearHightlight(k, e) {
     $.observable(this.state.highlightItem).remove(k);
     setTimeout(() => {
       this.initCanvas();
@@ -107,8 +120,6 @@ const ClipComponent = {
     $.observable(this.state.blackItem).remove(k);
   },
   removeEventListener() {
-    document.removeEventListener('mousemove', this._documentMouseMove(), false);
-    document.removeEventListener('click', this._elementHelperClick(), false);
     window.removeEventListener('resize', this._windowResize(), false);
   },
   toEditMode() {
@@ -166,65 +177,126 @@ const ClipComponent = {
     this.eX = e.clientX + window.scrollX;
     this.eY = e.clientY + window.scrollY;
   },
-  handleMoveMouseUp(e) {
-    this.move = false;
-    this.canvasMD = false;
-    if (this.dragRect) {
+  canvasMouseDown(e) {
+    // console.log('canvas mouse down===>');
+    this.canvasMD = true;
+    this.canvasMove = false;
+    this.startX = e.clientX + (document.documentElement.scrollLeft + document.body.scrollLeft);
+    this.startY = e.clientY + (document.documentElement.scrollTop + document.body.scrollTop);
+  },
+  containerMouseMove(e) {
+    if (!this.state.isEditMode) {
+      return false;
+    }
+    // console.log('container mouse move===>', this.move, this.canvasMD);
+    if (this.move) {
+      // move toolbar
+      this.canvasMove = false;
+      let toolBar = document.querySelector('#feedback .tool-bar.clearfix');
+      let eX = this.eX;
+      let eY = this.eY;
+      let newEX = e.clientX + window.scrollX;
+      let newEY = e.clientY + window.scrollY;
+      let oX = newEX - eX;
+      let oY = newEY - eY;
+      let curL = parseFloat(toolBar.style.left);
+      let curT = parseFloat(toolBar.style.top);
+      toolBar.style.left = `${curL + oX}px`;
+      toolBar.style.top = `${curT + oY}px`;
+      this.eX = newEX;
+      this.eY = newEY;
+    } else if (this.canvasMD) {
+      // draw element highlights
+      this.canvasMove = true;
+      let toolBarType = this.state.toolBarType;
+      let clientX = e.clientX + (document.documentElement.scrollLeft + document.body.scrollLeft),
+        clientY = e.clientY + (document.documentElement.scrollTop + document.body.scrollTop),
+        width = this.startX - clientX,
+        height = this.startY - clientY;
+      this.initCanvas();
+      this.drawHightlightBorder();
+      if (toolBarType === 'highlight') {
+        this.ctx.lineWidth = '5';
+        this.ctx.strokeStyle = '#FEEA4E';
+        this.ctx.rect(clientX, clientY, width, height);
+        this.ctx.stroke();
+        this.drawHightlightArea();
+        this.ctx.clearRect(clientX, clientY, width, height);
+        this.sctx.clearRect(clientX, clientY, width, height);
+      } else if (toolBarType === 'black') {
+        this.drawHightlightArea();
+        this.ctx.fillStyle = 'rgba(0,0,0,.4)';
+        this.ctx.fillRect(clientX, clientY, width, height);
+      }
+    } else {
+      this.canvasMove = true;
+      this.elementHelper(e);
+    }
+  },
+  containerMouseUp(e) {
+    if (!this.state.isEditMode) {
+      this.move = false;
+      this.canvasMD = false;
+      this.canvasMove = false;
+      return;
+    }
+    if (this._isClickOnCanvas(e.target)) {
+      this.move = false;
+      this.canvasMD = false;
+      this.canvasMove = false;
+      return false;
+    }
+    // console.log('container mouse up', this.canvasMove);
+    if (this.canvasMove) {
       let clientX = e.clientX + (document.documentElement.scrollLeft || document.body.scrollLeft),
         clientY = e.clientY + (document.documentElement.scrollTop || document.body.scrollTop),
         width = this.startX - clientX,
         height = this.startY - clientY;
-      if (Math.abs(width) < 6 || Math.abs(height) < 6) {
-        return;
+      if (Math.abs(width) >= 6 && Math.abs(height) >= 6) {
+        let toolBarType = this.state.toolBarType,
+          obj = {
+            sx: clientX,
+            sy: clientY,
+            width: width,
+            height: height
+          };
+        if (width < 0) {
+          obj.sx = obj.sx + width;
+          obj.width = Math.abs(width);
+        }
+        if (height < 0) {
+          obj.sy = obj.sy + height;
+          obj.height = Math.abs(height);
+        }
+        if (toolBarType === 'highlight') {
+          $.observable(this.state.highlightItem).insert(obj);
+        } else if (toolBarType === 'black') {
+          $.observable(this.state.blackItem).insert(obj);
+          // $.observable(this).setProperty('state.blackItem', blackItem);
+        }
+        setTimeout(() => {
+          this.canvasMove = false;
+          this.drawHightlightBorder();
+          this.drawHightlightArea();
+        });
       }
-      let toolBarType = this.state.toolBarType,
-        obj = {
-          sx: clientX,
-          sy: clientY,
-          width: width,
-          height: height
-        };
-      if (width < 0) {
-        obj.sx = obj.sx + width;
-        obj.width = Math.abs(width);
-      }
-      if (height < 0) {
-        obj.sy = obj.sy + height;
-        obj.height = Math.abs(height);
-      }
-      if (toolBarType === 'highlight') {
-        $.observable(this.state.highlightItem).insert(obj);
-      } else if (toolBarType === 'black') {
-        $.observable(this.state.blackItem).insert(obj);
-        // $.observable(this).setProperty('state.blackItem', blackItem);
-      }
-      setTimeout(() => {
-        this.dragRect = false;
-        this.drawHightlightBorder();
-        this.drawHightlightArea();
-      });
+    } else {
+      this.elementHelperClick(e);
     }
+    this.move = false;
+    this.canvasMD = false;
+    this.canvasMove = false;
   },
-  handleMouseMove(e) {
-    if (!this.move) return;
-    let toolBar = document.querySelector('#feedback .tool-bar.clearfix');
-    let eX = this.eX;
-    let eY = this.eY;
-    let newEX = e.clientX + window.scrollX;
-    let newEY = e.clientY + window.scrollY;
-    let oX = newEX - eX;
-    let oY = newEY - eY;
-    let curL = parseFloat(toolBar.style.left);
-    let curT = parseFloat(toolBar.style.top);
-    toolBar.style.left = `${curL + oX}px`;
-    toolBar.style.top = `${curT + oY}px`;
-    this.eX = newEX;
-    this.eY = newEY;
-  },
-  canvasMouseDown(e) {
-    this.canvasMD = true;
-    this.startX = e.clientX + (document.documentElement.scrollLeft + document.body.scrollLeft);
-    this.startY = e.clientY + (document.documentElement.scrollTop + document.body.scrollTop);
+  elementHelperClick(e) {
+    let rectInfo = this.inElement(e);
+    if (rectInfo) {
+      let toolBarType = this.state.toolBarType;
+      if (toolBarType === 'highlight') {
+        $.observable(this.state.highlightItem).insert(rectInfo);
+      } else if (toolBarType === 'black') {
+        $.observable(this.state.blackItem).insert(rectInfo);
+      }
+    }
   },
   drawHightlightBorder() {
     let highlightItem = this.state.highlightItem;
@@ -278,36 +350,6 @@ const ClipComponent = {
       this.ctx.fillRect(info.sx, info.sy, info.width, info.height);
     }
   },
-  documentMouseMove(e) {
-    if (this.canvasMD) {
-      if (!this.dragRect) {
-        this.dragRect = true;
-      }
-      let toolBarType = this.state.toolBarType;
-      let clientX = e.clientX + (document.documentElement.scrollLeft + document.body.scrollLeft),
-        clientY = e.clientY + (document.documentElement.scrollTop + document.body.scrollTop),
-        width = this.startX - clientX,
-        height = this.startY - clientY;
-      this.initCanvas();
-      this.drawHightlightBorder();
-      if (toolBarType === 'highlight') {
-        this.ctx.lineWidth = '5';
-        this.ctx.strokeStyle = '#FEEA4E';
-        this.ctx.rect(clientX, clientY, width, height);
-        this.ctx.stroke();
-        this.drawHightlightArea();
-        this.ctx.clearRect(clientX, clientY, width, height);
-        this.sctx.clearRect(clientX, clientY, width, height);
-      } else if (toolBarType === 'black') {
-        this.drawHightlightArea();
-        this.ctx.fillStyle = 'rgba(0,0,0,.4)';
-        this.ctx.fillRect(clientX, clientY, width, height);
-      }
-    } else {
-      this.dragRect = false;
-      this.elementHelper(e);
-    }
-  },
   elementHelper(e) {
     let rectInfo = this.inElement(e);
     let canvas = document.querySelector('#feedback #feedbackCanvas');
@@ -341,20 +383,6 @@ const ClipComponent = {
       return rectInfo;
     }
     return false;
-  },
-  elementHelperClick(e) {
-    if (this.dragRect) return;
-    let nodeName = e.target.nodeName;
-    if (nodeName !== 'CANVAS') return;
-    let rectInfo = this.inElement(e);
-    if (rectInfo) {
-      let toolBarType = this.state.toolBarType;
-      if (toolBarType === 'highlight') {
-        $.observable(this.state.highlightItem).insert(rectInfo);
-      } else if (toolBarType === 'black') {
-        $.observable(this.state.blackItem).insert(rectInfo);
-      }
-    }
   },
   shotScreen() {
     if (this.state.loading) return;

@@ -1,7 +1,7 @@
 {^{if state.isOpen}}
-<div id="googleFeedback" data-link="
-    {on 'mouseup' handleMoveMouseUp}
-    {on 'mousemove' handleMouseMove}
+<div id="feedback-wrap" data-link="
+    {on 'mousemove' containerMouseMove}
+    {on 'mouseup' containerMouseUp}
     css-height{:state.docHeight}
     ">
   <div class="feedback-window">
@@ -98,7 +98,7 @@
       </div>
       <div data-link="
                 {on 'click' setToolBarType 'highlight'}
-                class{:state.toolBarType == 'highlight' ? 'tool hight-light tool-active':'tool hight-light'}
+                class{:state.toolBarType == 'highlight' ? 'tool hight-light highlt-btn tool-active':'tool hight-light highlt-btn'}
                 " data-label={{:config.highlightTip}}>
         <span style="
                         display: inline-block;
@@ -126,7 +126,7 @@
       </div>
       <div data-link="
                 {on 'click' setToolBarType 'black'}
-                class{:state.toolBarType == 'black'?'tool hide tool-active':'tool hide'}"
+                class{:state.toolBarType == 'black'?'tool hide blacklt-btn tool-active':'tool hide blacklt-btn'}"
         data-label={{:config.hideTip}}>
         <span style="
                         display: inline-block;
@@ -156,7 +156,7 @@
           {{/if}}
         </span>
       </div>
-      <div class="button"><span class="flatbutton" draggable="false"
+      <div class="button"><span class="flatbutton close-edit-btn" draggable="false"
           data-link="{on 'click' leaveEditMode}">{{:config.editDoneLabel}}</span>
       </div>
     </div>
