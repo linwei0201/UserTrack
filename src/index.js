@@ -48,7 +48,10 @@ const UserTrack = {
   },
   _renderFeedbackModal() {
     var RenderTemplate = jsviews.templates(require('@/templates/feedback.html'));
-    document.body.append('<div id="feedback"></div>');
+    var divObj = document.createElement('div');
+    var first = document.body.firstChild;
+    divObj.setAttribute('id', 'feedback');
+    document.body.insertBefore(divObj, first);
     RenderTemplate.link('#feedback', this._component);
     this._component.componentDidMount();
   }
