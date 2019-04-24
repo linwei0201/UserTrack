@@ -179,17 +179,20 @@
     }
     #btn {
       width: 80px;
-      height: 80px;
-      padding: 10px;
+      height: 32px;
+      line-height: 32px; 
+      text-align: center;
       position: fixed;
       right: 50px;
       bottom: 100px;
-      border-radius: 50%;
-      background: #3986FF;
+      background: #0063B1;
       color: #FFF;
       border: none;
       outline: none;
       cursor: pointer;
+    }
+    #btn:hover {
+      background: #0078D7;
     }
   </style>
 </head>
@@ -274,7 +277,7 @@
     window.onload = function() {
       window.UserTrack.init({
         trigger: document.getElementById('btn'),
-        title: 'Send feedback',
+        title: 'Send Feedback',
         placeholder: 'Describe your issue or share your ideas',
         requiredTip: 'description is required',
         editTip: 'Click to highlight or hide info',

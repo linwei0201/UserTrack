@@ -62,7 +62,7 @@ v0.0.1 | 22/04/2019 | [Change Log v0.0.1](https://github.com/linwei0201/UserTrac
     window.onload = function () {
         window.UserTrack.init({
             trigger: document.querySelector('#btn'), // button to trigger feedback dialog
-            title: 'Send feedback', // title for feedback dialog
+            title: 'Send Feedback', // title for feedback dialog
             placeholder: 'Describe your issue or share your ideas', // placeholder for feedback text
             requiredTip: 'description is required', // tip for feedback text
             editTip: 'Click to highlight or hide info', // mouseover tip on edit screenshot

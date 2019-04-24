@@ -22,12 +22,12 @@ const ClipComponent = {
     snackbarMsg: ''
   },
   screenShotSrc: '',
-  move: false,
+  move: false, // is dragging tooltip
+  canvasMove: false, // is drawing rect on canvas
+  canvasMD: false,
   eX: 0,
   eY: 0,
   ctx: null,
-  canvasMove: false,
-  dragRect: false,
   startX: 0,
   startY: 0,
   _windowResize() {
@@ -83,7 +83,7 @@ const ClipComponent = {
     canvas.height = docHeight;
     shadowCanvas.width = docWidth;
     shadowCanvas.height = docHeight;
-    this.sctx.fillStyle = 'rgba(0,0,0,0.38)';
+    this.sctx.fillStyle = 'rgba(0,0,0,0.5)';
     this.sctx.fillRect(0, 0, docWidth, docHeight);
   },
   clearCanvasCtx() {
@@ -177,11 +177,7 @@ const ClipComponent = {
     this.eX = e.clientX + window.scrollX;
     this.eY = e.clientY + window.scrollY;
   },
-  highlighBtnMouseDown(e) {
-    // console.log('stop====');
-    e.stopPropagation();
-  },
-  blackBtnMouseDown(e) {
+  highlighModeMouseDown(e) {
     e.stopPropagation();
   },
   canvasMouseDown(e) {
@@ -229,7 +225,7 @@ const ClipComponent = {
       this.drawHightlightBorder();
       if (toolBarType === 'highlight') {
         this.ctx.lineWidth = '5';
-        this.ctx.strokeStyle = '#FEEA4E';
+        this.ctx.strokeStyle = '#FF8C00 ';
         this.ctx.rect(clientX, clientY, width, height);
         this.ctx.stroke();
         this.drawHightlightArea();
@@ -247,7 +243,6 @@ const ClipComponent = {
   },
   containerMouseUp(e) {
     // console.log('container up...', this.state.isEditMode, this._isClickOnCanvas(e.target));
-    // if (!this.state.isEditMode || this._isClickOnCanvas(e.target)) {
     if (!this.state.isEditMode) {
       this.move = false;
       this.canvasMD = false;
@@ -311,7 +306,7 @@ const ClipComponent = {
     let highlightItem = this.state.highlightItem;
     highlightItem.map((data, k) => {
       this.ctx.lineWidth = '5';
-      this.ctx.strokeStyle = '#FEEA4E';
+      this.ctx.strokeStyle = '#FF8C00 ';
       this.ctx.rect(data.sx, data.sy, data.width, data.height);
       this.ctx.stroke();
     });
@@ -345,7 +340,7 @@ const ClipComponent = {
     let toolBarType = this.state.toolBarType;
     if (toolBarType === 'highlight') {
       this.ctx.lineWidth = '5';
-      this.ctx.strokeStyle = '#FEEA4E';
+      this.ctx.strokeStyle = '#FF8C00';
       this.ctx.rect(info.sx, info.sy, info.width, info.height);
       this.ctx.stroke();
       this.drawHightlightBorder();

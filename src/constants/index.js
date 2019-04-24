@@ -4,7 +4,7 @@ export const DEFAULT_OPTION = {
   submitCallback: () => {},
   // theme: '#3986FF',
   // license: '',
-  title: 'Send feedback',
+  title: 'Send Feedback',
   placeholder: 'Describe your issue or share your ideas',
   requiredTip: 'description is required',
   editTip: 'Click to highlight or hide info',
