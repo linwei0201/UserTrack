@@ -30,7 +30,18 @@ const plugins = [
 if (devMode) {
   mode = 'development';
   outputFile = libraryName + '.js';
-  plugins.push(new BundleAnalyzerPlugin());
+  plugins.push(new BundleAnalyzerPlugin({
+    analyzerMode: 'server',
+    analyzerHost: '127.0.0.1',
+    analyzerPort: 8888,
+    reportFilename: 'report.html',
+    defaultSizes: 'parsed',
+    openAnalyzer: false,
+    generateStatsFile: false,
+    statsFilename: 'stats.json',
+    statsOptions: null,
+    logLevel: 'info'
+  }));
 } else {
   mode = 'production';
   outputFile = `${libraryName}.v${version}.min.js`;
@@ -78,6 +89,7 @@ const config = {
     after() {
       console.log('\r\n ====> demo ready at: http://127.0.0.1:9000/demo');
       console.log('\r\n ====> js ready at: http://127.0.0.1:9000/usertrack.js');
+      console.log('\r\n ====> bundle analyzer at: http://127.0.0.1:8888');
     }
   },
   output: {
