@@ -188,7 +188,7 @@ const ClipComponent = {
     if (!this.state.isEditMode) {
       return false;
     }
-    // console.log('container mouse move===>', this.move, this.canvasMD);
+
     if (this.move) {
       // move toolbar
       this.canvasMove = false;
@@ -207,12 +207,17 @@ const ClipComponent = {
       this.eY = newEY;
     } else if (this.canvasMD) {
       // draw element highlights
-      this.canvasMove = true;
       let toolBarType = this.state.toolBarType;
       let clientX = e.clientX + (document.documentElement.scrollLeft + document.body.scrollLeft),
         clientY = e.clientY + (document.documentElement.scrollTop + document.body.scrollTop),
         width = this.startX - clientX,
         height = this.startY - clientY;
+      if (this.startX === clientX && this.startY === clientY) {
+        this.canvasMove = false;
+        return false;
+      }
+      this.canvasMove = true;
+      // console.log('container mouse move===>', this.move, this.canvasMD, clientX, clientY, this.startX, this.startY);
       this.initCanvas();
       this.drawHightlightBorder();
       if (toolBarType === 'highlight') {
@@ -234,13 +239,8 @@ const ClipComponent = {
     }
   },
   containerMouseUp(e) {
-    if (!this.state.isEditMode) {
-      this.move = false;
-      this.canvasMD = false;
-      this.canvasMove = false;
-      return;
-    }
-    if (this._isClickOnCanvas(e.target)) {
+    // console.log('container up...', this.state.isEditMode, this._isClickOnCanvas(e.target));
+    if (!this.state.isEditMode || this._isClickOnCanvas(e.target)) {
       this.move = false;
       this.canvasMD = false;
       this.canvasMove = false;
@@ -288,6 +288,7 @@ const ClipComponent = {
     this.canvasMove = false;
   },
   elementHelperClick(e) {
+    // console.log('element helper click====');
     let rectInfo = this.inElement(e);
     if (rectInfo) {
       let toolBarType = this.state.toolBarType;

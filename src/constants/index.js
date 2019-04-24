@@ -29,6 +29,6 @@ export const HIGH_LIGHT_ELEMENTS = [
   'article',
   'summary',
   'section',
-  'div',
+  // 'div',
   'li'
 ];
