@@ -3,8 +3,7 @@ import '@/utils/domUtils';
 import { img2base64, video2base64 } from '@/utils/canvas';
 import { DEFAULT_OPTION } from '@/constants';
 import ClipComponent from '@/utils/clipComponent';
-import $ from 'jquery';
-var jsviews = require('jsviews')($);
+const jsviews = require('jsviews');
 
 const UserTrack = {
   _component: {},
@@ -47,9 +46,9 @@ const UserTrack = {
     });
   },
   _renderFeedbackModal() {
-    var RenderTemplate = jsviews.templates(require('@/templates/feedback.html'));
-    var divObj = document.createElement('div');
-    var first = document.body.firstChild;
+    const RenderTemplate = jsviews.templates(require('@/templates/feedback.html'));
+    const divObj = document.createElement('div');
+    const first = document.body.firstChild;
     divObj.setAttribute('id', 'feedback');
     document.body.insertBefore(divObj, first);
     RenderTemplate.link('#feedback', this._component);
