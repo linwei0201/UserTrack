@@ -1,6 +1,8 @@
+/* eslint-disable */
 /* global __dirname, require, module*/
 
 const path = require('path');
+const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const OptimizeCssPlugin = require('optimize-css-assets-webpack-plugin');
@@ -70,6 +72,9 @@ const config = {
       });
       app.get('/demo', (req, res) => {
         res.render('index.html');
+      });
+      app.get('/demo2', (req, res) => {
+        res.render('index-old.html');
       });
 
       app.all('*', (req, res, next) => {

@@ -28,5 +28,7 @@ export const HIGH_LIGHT_ELEMENTS = [
   'input', 'textarea', 'label', 'select', 'button', 'a',
   'article',
   'summary',
-  'section'
+  'section',
+  'div',
+  'li'
 ];

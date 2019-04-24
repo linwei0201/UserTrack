@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="80px" height="80px" viewBox="0 0 80 80" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 51.2 (57519) - http://www.bohemiancoding.com/sketch -->
+    <title>Profiles</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Profiles" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group-6">
+            <rect id="Rectangle" fill-rule="nonzero" x="0" y="0" width="80" height="80"></rect>
+            <path d="M61.1875,49 L64,49 L64,64 L16,64 L16,49 L18.8125,49 L21.8125,43 L19,43 L19,31 L26.5,16 L53.5,16 L61,31 L61,43 L58.1875,43 L61.1875,49 Z M34,34 L29.6640625,34 L25.1875,43 L34,43 L34,34 Z M37,34 L37,43 L43,43 L43,34 L37,34 Z M46,34 L46,43 L54.8125,43 L50.3359375,34 L46,34 Z M58,40 L58,34 L53.6640625,34 L56.6640625,40 L58,40 Z M28.3515625,19 L22.3515625,31 L57.6484375,31 L51.6484375,19 L28.3515625,19 Z M22,40 L23.3359375,40 L26.3359375,34 L22,34 L22,40 Z M23.6640625,46 L22.1875,49 L57.8125,49 L56.3359375,46 L23.6640625,46 Z M61,61 L61,52 L19,52 L19,61 L61,61 Z M46,55 L46,58 L34,58 L34,55 L46,55 Z" id="" fill="#EE4D5A"></path>
+        </g>
+    </g>
+</svg>

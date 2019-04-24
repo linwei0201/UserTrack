@@ -34,8 +34,6 @@ version | release time | change log
 ---- | --- | ---
 v0.0.1 | 22/04/2019 | [Change Log v0.0.1](https://github.com/linwei0201/UserTrack/blob/master/ChangeLog.md)
 
-
-  If jQuery is already referenced in your project, please put the usertrack.[hash].min.js in front of jQuery.
   ```js
   //Add feedback button
   <body>

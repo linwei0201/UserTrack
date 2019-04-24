@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="80px" height="80px" viewBox="0 0 80 80" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 51.2 (57519) - http://www.bohemiancoding.com/sketch -->
+    <title>Customer_Content</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Customer_Content" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group-6">
+            <rect id="Rectangle" fill-rule="nonzero" x="0" y="0" width="80" height="80"></rect>
+            <path d="M64,33.8125 L64,64 L16,64 L16,33.8125 L25,29.3359375 L25,16 L45.1328125,16 L55,25.8671875 L55,29.3359375 L64,33.8125 Z M55,32.6640625 L55,40.8671875 L60.4609375,35.40625 L55,32.6640625 Z M46,25 L49.8671875,25 L46,21.1328125 L46,25 Z M28,19 L28,43 L52,43 L52,28 L43,28 L43,19 L28,19 Z M25,32.6640625 L19.5390625,35.40625 L25,40.8671875 L25,32.6640625 Z M61,61 L61,39.1328125 L54.1328125,46 L25.8671875,46 L19,39.1328125 L19,61 L61,61 Z M49,34 L31,34 L31,31 L49,31 L49,34 Z M40,28 L31,28 L31,25 L40,25 L40,28 Z M49,40 L31,40 L31,37 L49,37 L49,40 Z" id="" fill="#FFB900"></path>
+        </g>
+    </g>
+</svg>
