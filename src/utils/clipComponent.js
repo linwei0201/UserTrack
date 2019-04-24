@@ -34,28 +34,28 @@ const ClipComponent = {
     this.windowResizeFn = this.windowResizeFn || this.windowResize.bind(this);
     return this.windowResizeFn;
   },
-  _hasTargetClass(target, classList = []) {
-    let hasClass = false;
-    classList.forEach(cls => {
-      if (target.classList && target.classList.contains(cls)) {
-        hasClass = true;
-      }
-    });
-    return hasClass;
-  },
-  _isClickOnCanvas(target) {
-    const excludeClasses = ['rect', 'highlt-btn', 'blacklt-btn', 'close-edit-btn'];
-    let parent = null;
-    let isOnCanvas = false;
-    while (target && !this._hasTargetClass(target, excludeClasses) && target.parentNode) {
-      target = target.parentNode;
-    }
-    parent = target;
-    if (parent && this._hasTargetClass(parent, excludeClasses)) {
-      isOnCanvas = true;
-    }
-    return isOnCanvas;
-  },
+  // _hasTargetClass(target, classList = []) {
+  //   let hasClass = false;
+  //   classList.forEach(cls => {
+  //     if (target.classList && target.classList.contains(cls)) {
+  //       hasClass = true;
+  //     }
+  //   });
+  //   return hasClass;
+  // },
+  // _isClickOnCanvas(target) {
+  //   const excludeClasses = ['rect', 'highlt-btn', 'blacklt-btn', 'close-edit-btn'];
+  //   let parent = null;
+  //   let isOnCanvas = false;
+  //   while (target && !this._hasTargetClass(target, excludeClasses) && target.parentNode) {
+  //     target = target.parentNode;
+  //   }
+  //   parent = target;
+  //   if (parent && this._hasTargetClass(parent, excludeClasses)) {
+  //     isOnCanvas = true;
+  //   }
+  //   return isOnCanvas;
+  // },
   initListeners() {
     window.addEventListener('resize', this._windowResize(), false);
   },
@@ -177,6 +177,13 @@ const ClipComponent = {
     this.eX = e.clientX + window.scrollX;
     this.eY = e.clientY + window.scrollY;
   },
+  highlighBtnMouseDown(e) {
+    // console.log('stop====');
+    e.stopPropagation();
+  },
+  blackBtnMouseDown(e) {
+    e.stopPropagation();
+  },
   canvasMouseDown(e) {
     // console.log('canvas mouse down===>');
     this.canvasMD = true;
@@ -240,14 +247,15 @@ const ClipComponent = {
   },
   containerMouseUp(e) {
     // console.log('container up...', this.state.isEditMode, this._isClickOnCanvas(e.target));
-    if (!this.state.isEditMode || this._isClickOnCanvas(e.target)) {
+    // if (!this.state.isEditMode || this._isClickOnCanvas(e.target)) {
+    if (!this.state.isEditMode) {
       this.move = false;
       this.canvasMD = false;
       this.canvasMove = false;
       return false;
     }
-    // console.log('container mouse up', this.canvasMove);
-    if (this.canvasMove) {
+    // console.log('container mouse up', this.canvasMD, this.canvasMove);
+    if (this.canvasMD && this.canvasMove) {
       let clientX = e.clientX + (document.documentElement.scrollLeft || document.body.scrollLeft),
         clientY = e.clientY + (document.documentElement.scrollTop || document.body.scrollTop),
         width = this.startX - clientX,

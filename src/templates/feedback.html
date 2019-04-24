@@ -98,6 +98,7 @@
       </div>
       <div data-link="
                 {on 'click' setToolBarType 'highlight'}
+                {on 'mousedown' highlighBtnMouseDown}
                 class{:state.toolBarType == 'highlight' ? 'tool hight-light highlt-btn tool-active':'tool hight-light highlt-btn'}
                 " data-label={{:config.highlightTip}}>
         <span style="
@@ -126,6 +127,7 @@
       </div>
       <div data-link="
                 {on 'click' setToolBarType 'black'}
+                {on 'mousedown' blackBtnMouseDown}
                 class{:state.toolBarType == 'black'?'tool hide blacklt-btn tool-active':'tool hide blacklt-btn'}"
         data-label={{:config.hideTip}}>
         <span style="
