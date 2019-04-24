@@ -378,7 +378,7 @@ const ClipComponent = {
   inElement(e) {
     let x = e.clientX,
       y = e.clientY;
-    let el = document.elementsFromPoint(x, y)[3];
+    let el = this.elementsFromPoint(x, y)[3];
     let canvas = document.querySelector('#feedback #feedbackCanvas');
     canvas.style.cursor = 'crosshair';
     if (el && HIGH_LIGHT_ELEMENTS.indexOf(el.nodeName.toLocaleLowerCase()) > -1) {
@@ -392,6 +392,29 @@ const ClipComponent = {
       return rectInfo;
     }
     return false;
+  },
+  elementsFromPoint(x, y) {
+    var parents = [];
+    var parent = void 0;
+    if (document.elementsFromPoint) {
+      return document.elementsFromPoint(x, y);
+    } else if (document.msElementsFromPoint) {
+      return document.msElementsFromPoint(x, y);
+    }
+    do {
+      if (parent !== document.elementFromPoint(x, y)) {
+        parent = document.elementFromPoint(x, y);
+        parents.push(parent);
+        parent.style.pointerEvents = 'none';
+      } else {
+        parent = false;
+      }
+    } while (parent);
+    parents.forEach(function (parent) {
+      // eslint-disable-next-line no-return-assign
+      return parent.style.pointerEvents = 'auto';
+    });
+    return parents;
   },
   shotScreen() {
     if (this.state.loading) return;
