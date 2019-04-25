@@ -109,6 +109,7 @@ const config = {
     rules: [
       {
         test: /\.(html)$/,
+        exclude: /node_modules/,
         use: {
           loader: 'html-loader',
           options: {
@@ -128,6 +129,7 @@ const config = {
       },
       {
         test: /\.less$/,
+        exclude: /node_modules/,
         use: [
           devMode ? 'style-loader' : MiniCssExtractPlugin.loader,
           'css-loader',
@@ -138,6 +140,7 @@ const config = {
       },
       {
         test: /\.(jpe?g|png|gif|svg)$/i,
+        exclude: /node_modules/,
         use: [
           { loader: 'file-loader?name=/public/icons/[name].[ext]' }
         ]
