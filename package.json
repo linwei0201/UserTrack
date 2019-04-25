@@ -4,8 +4,8 @@
   "description": "a library to track user behaviors",
   "main": "index.js",
   "scripts": {
-    "build": "cross-env NODE_ENV=production webpack",
-    "start": "cross-env NODE_ENV=development webpack-dev-server --progress --colors --info=false",
+    "build": "cross-env NODE_ENV=production webpack --config ./webpack/webpack.prod.config.js",
+    "start": "cross-env NODE_ENV=development webpack-dev-server --progress --colors --info=false --config ./webpack/webpack.dev.config.js",
     "test": "mocha --require babel-register --colors ./test/*.spec.js"
   },
   "keywords": [
@@ -44,6 +44,7 @@
     "webpack-bundle-analyzer": "^3.3.2",
     "webpack-cli": "^3.0.8",
     "webpack-dev-server": "^3.2.1",
+    "webpack-merge": "^4.2.1",
     "yargs": "^10.0.3"
   },
   "dependencies": {
