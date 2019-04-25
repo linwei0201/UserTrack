@@ -1,184 +1,250 @@
 {^{if state.isOpen}}
-<div id="feedback-wrap" data-link="
+<div
+  id="feedback-wrap"
+  data-link="
     {on 'mousemove' containerMouseMove}
     {on 'mouseup' containerMouseUp}
     css-height{:state.docHeight}
-    ">
+  "
+>
   <div class="feedback-window">
     {^{if !state.isEditMode}}
-    <div class="dialog-mask"></div>
+      <div class="dialog-mask"></div>
     {{else}}
     {{/if}}
     {^{if !state.isEditMode}}
-    <div id="feedbackDialog" class="dialog" data-html2canvas-ignore="true">
-      <div class="title">{{:config.title}}</div>
-      <div class="feedback-area">
-        {^{if state.textError}}
-        <div class="required-tip">{{:state.textError}}</div>
-        {{/if}}
-        <textarea placeholder="{{:config.placeholder}}" data-link="state.text"></textarea>
-        <div class="shot-switch clearfix">
-          <div class="checkbox" data-link="{on 'click' checkboxHandle}">
-            <svg data-link="class{:state.shotOpen ? 'checkbox-icon':'checkbox-icon active'}" focusable="false"
-              aria-label="" fill="#757575" viewBox="0 0 24 24" height="24" width="24">
-              <path d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z">
-              </path>
-            </svg>
-            <svg data-link="class{:!state.shotOpen ? 'checkbox-icon':'checkbox-icon active'}" focusable="false"
-              aria-label="" fill='#0078D4' viewBox="0 0 24 24" height="24" width="24">
-              <path
-                d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z">
-              </path>
-            </svg>
-          </div>
-          <label>{{:config.checkboxLabel}}</label>
-        </div>
-        {^{if state.shotOpen}}
-        <div class="screenshot-area">
-          {^{if state.loading}}
-          <div class="loading">
-            <div class="loading-icon">
-              <svg viewBox="0 0 40 40" style="
-                                        width: 40px;
-                                        height: 40px;
-                                        position: relative
-                                        ">
-                <circle cx="20" cy="20" r="18.25" fill="none" strokeWidth="3.5" strokeMiterlimit="20" style="stroke: rgb(57, 134, 255);
-                      stroke-linecap: round
-                      "></circle>
+      <div id="feedbackDialog" class="dialog" data-html2canvas-ignore="true">
+        <div class="title">{{:config.title}}</div>
+        <div class="feedback-area">
+          {^{if state.textError}}
+            <div class="required-tip">{{:state.textError}}</div>
+          {{/if}}
+          <textarea placeholder="{{:config.placeholder}}" data-link="state.text"></textarea>
+          <div class="shot-switch clearfix">
+            <div class="checkbox" data-link="{on 'click' checkboxHandle}">
+              <svg
+                data-link="class{:state.shotOpen ? 'checkbox-icon':'checkbox-icon active'}"
+                focusable="false"
+                aria-label=""
+                fill="#757575"
+                viewBox="0 0 24 24"
+                height="24"
+                width="24"
+              >
+                <path d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"></path>
+              </svg>
+              <svg
+                data-link="class{:!state.shotOpen ? 'checkbox-icon':'checkbox-icon active'}"
+                focusable="false"
+                aria-label=""
+                fill='#0078D4'
+                viewBox="0 0 24 24"
+                height="24"
+                width="24"
+              >
+                <path d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"></path>
               </svg>
             </div>
-            <span class="loading-text">{{:config.loadingTip}}</span>
+            <label>{{:config.checkboxLabel}}</label>
           </div>
-          {{else}}
-          {{/if}}
-          <div class="screenshot">
-            {^{if state.screenshotEdit && !state.loading}}
-            <div class="to-edit-bg"></div>
-            <div class="to-edit" data-link="{on 'click' toEditMode}">
-              <div class="edit-icon">
-                  <svg width="24px" height="23px" viewBox="0 0 24 23" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                    <g id="Feedback" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                        <g id="Desktop-HD-Copy" transform="translate(-708.000000, -530.000000)" fill="#333333" fill-rule="nonzero">
+          {^{if state.shotOpen}}
+            <div class="screenshot-area">
+              {^{if state.loading}}
+                <div class="loading">
+                  <div class="loading-icon">
+                    <svg
+                      viewBox="0 0 40 40"
+                      style="
+                        width: 40px;
+                        height: 40px;
+                        position: relative
+                      "
+                    >
+                      <circle
+                        cx="20"
+                        cy="20"
+                        r="18.25"
+                        fill="none"
+                        strokeWidth="3.5"
+                        strokeMiterlimit="20"
+                        style="
+                          stroke: rgb(57, 134, 255);
+                          stroke-linecap: round
+                        "
+                      ></circle>
+                    </svg>
+                  </div>
+                  <span class="loading-text">{{:config.loadingTip}}</span>
+                </div>
+              {{else}}
+              {{/if}}
+              <div class="screenshot">
+                {^{if state.screenshotEdit && !state.loading}}
+                  <div class="to-edit-bg"></div>
+                  <div class="to-edit" data-link="{on 'click' toEditMode}">
+                    <div class="edit-icon">
+                      <svg
+                        width="24px"
+                        height="23px"
+                        viewBox="0 0 24 23"
+                        version="1.1"
+                        xmlns="http://www.w3.org/2000/svg"
+                        xmlns:xlink="http://www.w3.org/1999/xlink"
+                      >
+                        <g id="Feedback" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                          <g id="Desktop-HD-Copy" transform="translate(-708.000000, -530.000000)" fill="#333333" fill-rule="nonzero">
                             <g id="Group-2" transform="translate(643.000000, 529.000000)">
-                                <path d="M89,1.5 L89,12 L87.5,12 L87.5,7.5 L66.5,7.5 L66.5,19.5 L72.5,19.5 L72.5,21 L65,21 L65,1.5 L89,1.5 Z M87.5,6 L87.5,3 L66.5,3 L66.5,6 L87.5,6 Z M85.5664062,13.5 L89,13.5 L89,24 L74,24 L74,13.5 L77.4335938,13.5 L78.9335938,12 L84.0664062,12 L85.5664062,13.5 Z M87.5,15 L84.9335938,15 L83.4335938,13.5 L79.5664062,13.5 L78.0664062,15 L75.5,15 L75.5,22.5 L87.5,22.5 L87.5,15 Z M81.5,15 C81.9140646,15 82.3027326,15.0781242 82.6660156,15.234375 C83.0292987,15.3906258 83.3476549,15.6054674 83.6210938,15.8789062 C83.8945326,16.1523451 84.1093742,16.4707013 84.265625,16.8339844 C84.4218758,17.1972674 84.5,17.5859354 84.5,18 C84.5,18.4140646 84.4218758,18.8027326 84.265625,19.1660156 C84.1093742,19.5292987 83.8945326,19.8476549 83.6210938,20.1210938 C83.3476549,20.3945326 83.0292987,20.6093742 82.6660156,20.765625 C82.3027326,20.9218758 81.9140646,21 81.5,21 C81.0859354,21 80.6972674,20.9218758 80.3339844,20.765625 C79.9707013,20.6093742 79.6523451,20.3945326 79.3789062,20.1210938 C79.1054674,19.8476549 78.8906258,19.5292987 78.734375,19.1660156 C78.5781242,18.8027326 78.5,18.4140646 78.5,18 C78.5,17.5859354 78.5781242,17.1972674 78.734375,16.8339844 C78.8906258,16.4707013 79.1054674,16.1523451 79.3789062,15.8789062 C79.6523451,15.6054674 79.9707013,15.3906258 80.3339844,15.234375 C80.6972674,15.0781242 81.0859354,15 81.5,15 Z M81.5,19.5 C81.7109386,19.5 81.9062491,19.4609379 82.0859375,19.3828125 C82.2656259,19.3046871 82.4238274,19.1972663 82.5605469,19.0605469 C82.6972663,18.9238274 82.8046871,18.7656259 82.8828125,18.5859375 C82.9609379,18.4062491 83,18.2109386 83,18 C83,17.7890614 82.9609379,17.5937509 82.8828125,17.4140625 C82.8046871,17.2343741 82.6972663,17.0761726 82.5605469,16.9394531 C82.4238274,16.8027337 82.2656259,16.6953129 82.0859375,16.6171875 C81.9062491,16.5390621 81.7109386,16.5 81.5,16.5 C81.2890614,16.5 81.0937509,16.5390621 80.9140625,16.6171875 C80.7343741,16.6953129 80.5761726,16.8027337 80.4394531,16.9394531 C80.3027337,17.0761726 80.1953129,17.2343741 80.1171875,17.4140625 C80.0390621,17.5937509 80,17.7890614 80,18 C80,18.2109386 80.0390621,18.4062491 80.1171875,18.5859375 C80.1953129,18.7656259 80.3027337,18.9238274 80.4394531,19.0605469 C80.5761726,19.1972663 80.7343741,19.3046871 80.9140625,19.3828125 C81.0937509,19.4609379 81.2890614,19.5 81.5,19.5 Z" id=""></path>
+                              <path d="M89,1.5 L89,12 L87.5,12 L87.5,7.5 L66.5,7.5 L66.5,19.5 L72.5,19.5 L72.5,21 L65,21 L65,1.5 L89,1.5 Z M87.5,6 L87.5,3 L66.5,3 L66.5,6 L87.5,6 Z M85.5664062,13.5 L89,13.5 L89,24 L74,24 L74,13.5 L77.4335938,13.5 L78.9335938,12 L84.0664062,12 L85.5664062,13.5 Z M87.5,15 L84.9335938,15 L83.4335938,13.5 L79.5664062,13.5 L78.0664062,15 L75.5,15 L75.5,22.5 L87.5,22.5 L87.5,15 Z M81.5,15 C81.9140646,15 82.3027326,15.0781242 82.6660156,15.234375 C83.0292987,15.3906258 83.3476549,15.6054674 83.6210938,15.8789062 C83.8945326,16.1523451 84.1093742,16.4707013 84.265625,16.8339844 C84.4218758,17.1972674 84.5,17.5859354 84.5,18 C84.5,18.4140646 84.4218758,18.8027326 84.265625,19.1660156 C84.1093742,19.5292987 83.8945326,19.8476549 83.6210938,20.1210938 C83.3476549,20.3945326 83.0292987,20.6093742 82.6660156,20.765625 C82.3027326,20.9218758 81.9140646,21 81.5,21 C81.0859354,21 80.6972674,20.9218758 80.3339844,20.765625 C79.9707013,20.6093742 79.6523451,20.3945326 79.3789062,20.1210938 C79.1054674,19.8476549 78.8906258,19.5292987 78.734375,19.1660156 C78.5781242,18.8027326 78.5,18.4140646 78.5,18 C78.5,17.5859354 78.5781242,17.1972674 78.734375,16.8339844 C78.8906258,16.4707013 79.1054674,16.1523451 79.3789062,15.8789062 C79.6523451,15.6054674 79.9707013,15.3906258 80.3339844,15.234375 C80.6972674,15.0781242 81.0859354,15 81.5,15 Z M81.5,19.5 C81.7109386,19.5 81.9062491,19.4609379 82.0859375,19.3828125 C82.2656259,19.3046871 82.4238274,19.1972663 82.5605469,19.0605469 C82.6972663,18.9238274 82.8046871,18.7656259 82.8828125,18.5859375 C82.9609379,18.4062491 83,18.2109386 83,18 C83,17.7890614 82.9609379,17.5937509 82.8828125,17.4140625 C82.8046871,17.2343741 82.6972663,17.0761726 82.5605469,16.9394531 C82.4238274,16.8027337 82.2656259,16.6953129 82.0859375,16.6171875 C81.9062491,16.5390621 81.7109386,16.5 81.5,16.5 C81.2890614,16.5 81.0937509,16.5390621 80.9140625,16.6171875 C80.7343741,16.6953129 80.5761726,16.8027337 80.4394531,16.9394531 C80.3027337,17.0761726 80.1953129,17.2343741 80.1171875,17.4140625 C80.0390621,17.5937509 80,17.7890614 80,18 C80,18.2109386 80.0390621,18.4062491 80.1171875,18.5859375 C80.1953129,18.7656259 80.3027337,18.9238274 80.4394531,19.0605469 C80.5761726,19.1972663 80.7343741,19.3046871 80.9140625,19.3828125 C81.0937509,19.4609379 81.2890614,19.5 81.5,19.5 Z" id=""></path>
                             </g>
+                          </g>
                         </g>
-                    </g>
-                </svg>
+                      </svg>
+                    </div>
+                    <span class="edit-label">{{:config.editTip}}</span>
+                  </div>
+                {{else}}
+                {{/if}}
+                <img id="screenshotPrev" data-link="src{:screenShotSrc}" />
               </div>
-              <span class="edit-label">{{:config.editTip}}</span>
             </div>
-            {{else}}
-            {{/if}}
-            <img id="screenshotPrev" data-link="src{:screenShotSrc}">
+          {{else}}
+          {{/if}}
+          <div class="actions">
+            <div class="flatbutton cancel" data-link="{on 'click' cancel}">
+              {{:config.cancelLabel}}
+            </div>
+            <div class="flatbutton confirm" data-link="{on 'click' send}">
+              {{:config.confirmLabel}}
+            </div>
           </div>
         </div>
-        {{else}}
-        {{/if}}
-        <div class="actions">
-          <div class="flatbutton cancel" data-link="{on 'click' cancel}">
-            {{:config.cancelLabel}}</div>
-          <div class="flatbutton confirm" data-link="{on 'click' send}">
-            {{:config.confirmLabel}}</div>
+      </div>
+    {{else}}
+      <div ref="toolBar" class="tool-bar clearfix">
+        <div class="move" data-link="{on 'mousedown' handleToolbarMouseDown}">
+          <svg
+            width="10px"
+            height="34px"
+            viewBox="0 0 10 34"
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+          >
+            <g id="Feedback" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+              <g id="Feedback_Toolbar" transform="translate(-591.000000, -383.000000)" fill="#666666" fill-rule="nonzero">
+                <g id="Group-2" transform="translate(576.000000, 364.000000)">
+                  <g id="Group" transform="translate(15.000000, 19.000000)">
+                    <path d="M6.5,0.5 L9.5,0.5 L9.5,3.5 L6.5,3.5 L6.5,0.5 Z M6.5,9.5 L6.5,6.5 L9.5,6.5 L9.5,9.5 L6.5,9.5 Z M6.5,15.5 L6.5,12.5 L9.5,12.5 L9.5,15.5 L6.5,15.5 Z M0.5,3.5 L0.5,0.5 L3.5,0.5 L3.5,3.5 L0.5,3.5 Z M0.5,9.5 L0.5,6.5 L3.5,6.5 L3.5,9.5 L0.5,9.5 Z M0.5,15.5 L0.5,12.5 L3.5,12.5 L3.5,15.5 L0.5,15.5 Z M6.5,18.5 L9.5,18.5 L9.5,21.5 L6.5,21.5 L6.5,18.5 Z M6.5,27.5 L6.5,24.5 L9.5,24.5 L9.5,27.5 L6.5,27.5 Z M6.5,33.5 L6.5,30.5 L9.5,30.5 L9.5,33.5 L6.5,33.5 Z M0.5,21.5 L0.5,18.5 L3.5,18.5 L3.5,21.5 L0.5,21.5 Z M0.5,27.5 L0.5,24.5 L3.5,24.5 L3.5,27.5 L0.5,27.5 Z M0.5,33.5 L0.5,30.5 L3.5,30.5 L3.5,33.5 L0.5,33.5 Z" id="Combined-Shape"></path>
+                  </g>
+                </g>
+              </g>
+            </g>
+          </svg>
+        </div>
+        <div
+          data-link="
+            {on 'click' setToolBarType 'highlight'}
+            {on 'mousedown' highlighModeMouseDown}
+            class{:state.toolBarType == 'highlight' ? 'tool hight-light highlt-btn tool-active':'tool hight-light highlt-btn'}
+          "
+          data-label={{:config.highlightTip}}
+        >
+          <span
+            style="
+              display: inline-block;
+              position: relative;
+              height: 36px;
+              width: 36px;
+              padding-top: 5px;
+              padding-left: 5px;
+            "
+          >
+            <svg
+              width="24px"
+              height="24px"
+              viewBox="0 0 24 24"
+              version="1.1"
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+            >
+              <g id="Feedback" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                <g id="Feedback_Toolbar" transform="translate(-632.000000, -388.000000)" fill="#0078D7" fill-rule="nonzero">
+                  <g id="Group-2" transform="translate(576.000000, 364.000000)">
+                    <path d="M79.9181596,27.6921302 L79.9181596,29.5381953 L76.2295759,29.5381953 L76.2295759,33.2303255 L74.3852841,33.2303255 L74.3852841,29.5381953 L70.6967004,29.5381953 L70.6967004,27.6921302 L74.3852841,27.6921302 L74.3852841,24 L76.2295759,24 L76.2295759,27.6921302 L79.9181596,27.6921302 Z M78.1315018,33.2314793 L79.9757937,33.2314793 L79.9757937,38.7696745 L78.1315018,38.7696745 L78.1315018,33.2314793 Z M57.8442918,38.7696745 L56,38.7696745 L56,33.2314793 L57.8442918,33.2314793 L57.8442918,38.7696745 Z M65.2214591,24.0011538 L70.7543346,24.0011538 L70.7543346,25.8472189 L65.2214591,25.8472189 L65.2214591,24.0011538 Z M65.2214591,46.1539349 L70.7543346,46.1539349 L70.7543346,48 L65.2214591,48 L65.2214591,46.1539349 Z M61.5340281,46.1516273 L61.5340281,48 L56,48 L56,42.4606509 L57.8465972,42.4606509 L57.8465972,46.1516273 L61.5340281,46.1516273 Z M61.5340281,25.8483727 L57.8465972,25.8483727 L57.8465972,29.5393491 L56,29.5393491 L56,24 L61.5340281,24 L61.5340281,25.8483727 Z M74.4659719,46.1516273 L78.1534028,46.1516273 L78.1534028,42.4606509 L80,42.4606509 L80,48 L74.4659719,48 L74.4659719,46.1516273 Z" id="" transform="translate(68.000000, 36.000000) rotate(90.000000) translate(-68.000000, -36.000000) ">
+                    </path>
+                  </g>
+                </g>
+              </g>
+            </svg>
+          </span>
+        </div>
+        <div
+          data-link="
+            {on 'click' setToolBarType 'black'}
+            {on 'mousedown' highlighModeMouseDown}
+            class{:state.toolBarType == 'black'?'tool hide blacklt-btn tool-active':'tool hide blacklt-btn'}
+          "
+          data-label={{:config.hideTip}}
+        >
+          <span
+            style="
+              display: inline-block;
+              position: relative;
+              height: 36px;
+              width: 36px
+            "
+          >
+            {^{if state.toolBarType == 'black'}}
+              <svg focusable="false" aria-label="" viewBox="0 0 24 24" height="36" width="36" fill="#000">
+                <path d="M3 3h18v18H3z"></path>
+              </svg>
+            {{else}}
+              <svg focusable="false" aria-label="" viewBox="0 0 24 24" height="36" width="36" fill="#000">
+                <path d="M3 3h18v18H3z"></path>
+              </svg>
+            {{/if}}
+          </span>
+        </div>
+        <div class="button">
+          <span
+            class="flatbutton close-edit-btn"
+            draggable="false"
+            data-link="{on 'click' leaveEditMode}"
+          >{{:config.editDoneLabel}}</span>
         </div>
       </div>
-    </div>
-    {{else}}
-    <div ref="toolBar" class="tool-bar clearfix">
-      <div class="move" data-link="{on 'mousedown' handleToolbarMouseDown}">
-          <svg width="10px" height="34px" viewBox="0 0 10 34" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-            <g id="Feedback" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                <g id="Feedback_Toolbar" transform="translate(-591.000000, -383.000000)" fill="#666666" fill-rule="nonzero">
-                    <g id="Group-2" transform="translate(576.000000, 364.000000)">
-                        <g id="Group" transform="translate(15.000000, 19.000000)">
-                            <path d="M6.5,0.5 L9.5,0.5 L9.5,3.5 L6.5,3.5 L6.5,0.5 Z M6.5,9.5 L6.5,6.5 L9.5,6.5 L9.5,9.5 L6.5,9.5 Z M6.5,15.5 L6.5,12.5 L9.5,12.5 L9.5,15.5 L6.5,15.5 Z M0.5,3.5 L0.5,0.5 L3.5,0.5 L3.5,3.5 L0.5,3.5 Z M0.5,9.5 L0.5,6.5 L3.5,6.5 L3.5,9.5 L0.5,9.5 Z M0.5,15.5 L0.5,12.5 L3.5,12.5 L3.5,15.5 L0.5,15.5 Z M6.5,18.5 L9.5,18.5 L9.5,21.5 L6.5,21.5 L6.5,18.5 Z M6.5,27.5 L6.5,24.5 L9.5,24.5 L9.5,27.5 L6.5,27.5 Z M6.5,33.5 L6.5,30.5 L9.5,30.5 L9.5,33.5 L6.5,33.5 Z M0.5,21.5 L0.5,18.5 L3.5,18.5 L3.5,21.5 L0.5,21.5 Z M0.5,27.5 L0.5,24.5 L3.5,24.5 L3.5,27.5 L0.5,27.5 Z M0.5,33.5 L0.5,30.5 L3.5,30.5 L3.5,33.5 L0.5,33.5 Z" id="Combined-Shape"></path>
-                        </g>
-                    </g>
-                </g>
-            </g>
-        </svg>
-      </div>
-      <div data-link="
-                {on 'click' setToolBarType 'highlight'}
-                {on 'mousedown' highlighModeMouseDown}
-                class{:state.toolBarType == 'highlight' ? 'tool hight-light highlt-btn tool-active':'tool hight-light highlt-btn'}
-                " data-label={{:config.highlightTip}}>
-        <span style="
-                        display: inline-block;
-                        position: relative;
-                        height: 36px;
-                        width: 36px;
-                        padding-top: 5px;
-                        padding-left: 5px;
-                        ">
-          <svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-              <g id="Feedback" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                  <g id="Feedback_Toolbar" transform="translate(-632.000000, -388.000000)" fill="#0078D7" fill-rule="nonzero">
-                      <g id="Group-2" transform="translate(576.000000, 364.000000)">
-                          <path d="M79.9181596,27.6921302 L79.9181596,29.5381953 L76.2295759,29.5381953 L76.2295759,33.2303255 L74.3852841,33.2303255 L74.3852841,29.5381953 L70.6967004,29.5381953 L70.6967004,27.6921302 L74.3852841,27.6921302 L74.3852841,24 L76.2295759,24 L76.2295759,27.6921302 L79.9181596,27.6921302 Z M78.1315018,33.2314793 L79.9757937,33.2314793 L79.9757937,38.7696745 L78.1315018,38.7696745 L78.1315018,33.2314793 Z M57.8442918,38.7696745 L56,38.7696745 L56,33.2314793 L57.8442918,33.2314793 L57.8442918,38.7696745 Z M65.2214591,24.0011538 L70.7543346,24.0011538 L70.7543346,25.8472189 L65.2214591,25.8472189 L65.2214591,24.0011538 Z M65.2214591,46.1539349 L70.7543346,46.1539349 L70.7543346,48 L65.2214591,48 L65.2214591,46.1539349 Z M61.5340281,46.1516273 L61.5340281,48 L56,48 L56,42.4606509 L57.8465972,42.4606509 L57.8465972,46.1516273 L61.5340281,46.1516273 Z M61.5340281,25.8483727 L57.8465972,25.8483727 L57.8465972,29.5393491 L56,29.5393491 L56,24 L61.5340281,24 L61.5340281,25.8483727 Z M74.4659719,46.1516273 L78.1534028,46.1516273 L78.1534028,42.4606509 L80,42.4606509 L80,48 L74.4659719,48 L74.4659719,46.1516273 Z" id="" transform="translate(68.000000, 36.000000) rotate(90.000000) translate(-68.000000, -36.000000) "></path>
-                      </g>
-                  </g>
-              </g>
-          </svg>
-        </span>
-      </div>
-      <div data-link="
-                {on 'click' setToolBarType 'black'}
-                {on 'mousedown' highlighModeMouseDown}
-                class{:state.toolBarType == 'black'?'tool hide blacklt-btn tool-active':'tool hide blacklt-btn'}"
-        data-label={{:config.hideTip}}>
-        <span style="
-                        display: inline-block;
-                        position: relative;
-                        height: 36px;
-                        width: 36px
-                    ">
-          {^{if state.toolBarType == 'black'}}
-          <svg focusable="false" aria-label="" viewBox="0 0 24 24" height="36" width="36" fill="#000">
-            <path d="M3 3h18v18H3z"></path>
-          </svg>
-          {{else}}
-          <svg focusable="false" aria-label="" viewBox="0 0 24 24" height="36" width="36" fill="#000">
-            <path d="M3 3h18v18H3z"></path>
-          </svg>
-          {{/if}}
-        </span>
-      </div>
-      <div class="button"><span class="flatbutton close-edit-btn" draggable="false"
-          data-link="{on 'click' leaveEditMode}">{{:config.editDoneLabel}}</span>
-      </div>
-    </div>
     {{/if}}
     <div class="hightlight-area">
       {^{for state.highlightItem}}
-      <div class="rect" data-link="css-width{:width} css-height{:height} css-left{:sx} css-top{:sy}">
-        <span class="close" data-link="{on ~root.clearHightlight #index}">
-          <svg viewBox="0 0 1024 1024" width="16" height="16">
-            <path
-              d="M896 224l-96-96-288 288-288-288-96 96 288 288-288 288 96 96 288-288 288 288 96-96-288-288 288-288z" />
-          </svg>
-        </span>
-      </div>
+        <div class="rect" data-link="css-width{:width} css-height{:height} css-left{:sx} css-top{:sy}">
+          <span class="close" data-link="{on ~root.clearHightlight #index}">
+            <svg viewBox="0 0 1024 1024" width="16" height="16">
+              <path d="M896 224l-96-96-288 288-288-288-96 96 288 288-288 288 96 96 288-288 288 288 96-96-288-288 288-288z" />
+            </svg>
+          </span>
+        </div>
       {{/for}}
     </div>
     <div class="black-area">
       {^{for state.blackItem}}
-      <div class="rect" data-link="css-width{:width} css-height{:height} css-left{:sx} css-top{:sy}">
-        <span class="close" data-link="{on ~root.clearBlack #index}">
-          <svg viewBox="0 0 1024 1024" width="16" height="16">
-            <path
-              d="M896 224l-96-96-288 288-288-288-96 96 288 288-288 288 96 96 288-288 288 288 96-96-288-288 288-288z" />
-          </svg>
-        </span>
-      </div>
+        <div class="rect" data-link="css-width{:width} css-height{:height} css-left{:sx} css-top{:sy}">
+          <span class="close" data-link="{on ~root.clearBlack #index}">
+            <svg viewBox="0 0 1024 1024" width="16" height="16">
+              <path d="M896 224l-96-96-288 288-288-288-96 96 288 288-288 288 96 96 288-288 288 288 96-96-288-288 288-288z" />
+            </svg>
+          </span>
+        </div>
       {{/for}}
     </div>
   </div>
-  <canvas id="feedbackCanvas" data-html2canvas-ignore="true" data-link="{on 'mousedown' canvasMouseDown}"></canvas>
+  <canvas
+    id="feedbackCanvas"
+    data-html2canvas-ignore="true"
+    data-link="{on 'mousedown' canvasMouseDown}"
+  ></canvas>
   <canvas id="shadowCanvas"></canvas>
   {^{if state.snackbar}}
-  <div class="snackbar">{{:state.snackbarMsg}}</div>
+    <div class="snackbar">{{:state.snackbarMsg}}</div>
   {{/if}}
 </div>
 {{/if}}
