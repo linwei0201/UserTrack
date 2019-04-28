@@ -83,7 +83,7 @@ const ClipComponent = {
     canvas.height = docHeight;
     shadowCanvas.width = docWidth;
     shadowCanvas.height = docHeight;
-    this.sctx.fillStyle = 'rgba(0,0,0,0.5)';
+    this.sctx.fillStyle = 'rgba(0,0,0,0.38)';
     this.sctx.fillRect(0, 0, docWidth, docHeight);
   },
   clearCanvasCtx() {
@@ -458,7 +458,7 @@ const ClipComponent = {
   },
   checkboxHandle() {
     $.observable(this).setProperty('state.shotOpen', !this.state.shotOpen);
-    if (!this.state.shotOpen) {
+    if (this.state.shotOpen) {
       this.shotScreen();
     }
   },

@@ -85,6 +85,8 @@ a library to track user behaviors
       })
     }
     ```
+  - exclude certain elements
+  > You can add a data-html2canvas-ignore attribute to those elements and html2canvas will exclude them from the rendering.
 
 ## versions
 
